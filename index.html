@@ -1,9 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>이펙필드 아카데미</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,14 +15,16 @@
   --blue:#9FB6FC;
   --pink:#ff8fb1;
 
-  --gradient:linear-gradient(
-    120deg,
-    #9CD098 0%,
-    #94D3E1 35%,
-    #9FB6FC 70%,
-    #94D3E1 85%,
-    #9CD098 100%
-  );
+  /* 기존의 부드러운 색감 유지 */
+  --main-gradient:
+    linear-gradient(
+      135deg,
+      #9CD098 0%,
+      #94D3E1 38%,
+      #9FB6FC 72%,
+      #94D3E1 88%,
+      #9CD098 100%
+    );
 }
 
 *{
@@ -41,89 +43,115 @@ html,body{
 }
 
 body{
-  background:var(--gradient);
+  background:
+    linear-gradient(
+      135deg,
+      #9CD098 0%,
+      #94D3E1 38%,
+      #9FB6FC 72%,
+      #94D3E1 88%,
+      #9CD098 100%
+    );
   background-attachment:fixed;
 }
 
 /* =========================
-   공통 버튼
+   버튼
 ========================= */
 
 .gradientBtn{
   border:none;
-  border-radius:10px;
+  border-radius:9px;
   padding:10px 16px;
-  background:var(--gradient);
-  color:#111;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9CD098,
+      #94D3E1,
+      #9FB6FC
+    );
+
+  color:#222;
   font-weight:700;
   cursor:pointer;
   transition:.2s;
 }
 
 .gradientBtn:hover{
+  filter:brightness(1.02);
   transform:translateY(-1px);
-  filter:brightness(1.03);
-}
-
-.gradientBtn:active{
-  transform:translateY(0);
 }
 
 /* =========================
-   잠금 화면
+   입장 화면
 ========================= */
 
 #lockScreen{
   position:fixed;
   inset:0;
+
   display:flex;
   justify-content:center;
   align-items:center;
-  background:var(--gradient);
+
+  background:
+    linear-gradient(
+      135deg,
+      #9CD098 0%,
+      #94D3E1 38%,
+      #9FB6FC 72%,
+      #94D3E1 88%,
+      #9CD098 100%
+    );
+
   z-index:9999;
 }
 
 .lockBox{
-  width:min(420px,90vw);
+  width:min(400px,90vw);
   padding:35px;
-  background:white;
-  border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+  background:rgba(255,255,255,.9);
+  border-radius:18px;
+
+  box-shadow:
+    0 12px 35px rgba(70,100,120,.12);
+
   text-align:center;
 }
 
 .lockBox h2{
   margin:0 0 10px;
-  font-size:26px;
+  font-size:25px;
 }
 
 .lockBox p{
-  margin:0 0 22px;
+  margin:0 0 20px;
   color:#666;
 }
 
 .lockInput{
   width:100%;
-  padding:13px;
+  padding:12px;
+
   border:1px solid #ddd;
-  border-radius:10px;
+  border-radius:9px;
+
   outline:none;
   font-size:15px;
 }
 
-.lockInput:focus{
-  border-color:#94cde0;
-}
-
 .lockButton{
   width:100%;
-  margin-top:10px;
+  margin-top:9px;
 }
 
 .errorText{
   min-height:20px;
-  margin-top:10px;
-  color:#ff6f9d;
+  margin-top:9px;
+
+  color:#ff75a2;
   font-size:14px;
   font-weight:600;
 }
@@ -135,7 +163,7 @@ body{
 .mainPage{
   display:none;
   min-height:100vh;
-  padding:50px 0;
+  padding:45px 0;
 }
 
 .wrap{
@@ -151,35 +179,54 @@ body{
 
 .hero h1{
   margin:0;
+
   color:#000;
+
   font-size:42px;
   line-height:1.25;
 }
 
 .hero p{
-  margin:10px 0 0;
+  margin:9px 0 0;
+
   color:#333;
   font-size:16px;
 }
 
 /* =========================
-   관리자 버튼
+   관리자 열기 버튼
 ========================= */
 
 .adminToggle{
   position:fixed;
   left:0;
   top:50%;
+
   transform:translateY(-50%);
+
   width:35px;
-  height:70px;
+  height:68px;
+
   border:none;
-  border-radius:0 12px 12px 0;
-  background:var(--gradient);
-  font-size:24px;
+  border-radius:0 10px 10px 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9CD098,
+      #94D3E1,
+      #9FB6FC
+    );
+
+  color:#222;
+  font-size:23px;
+
   cursor:pointer;
+
   z-index:5000;
-  box-shadow:3px 3px 12px rgba(0,0,0,.1);
+
+  box-shadow:
+    3px 3px 12px rgba(60,80,100,.1);
 }
 
 /* =========================
@@ -188,15 +235,24 @@ body{
 
 .adminPanel{
   position:fixed;
+
   left:-380px;
   top:0;
+
   width:min(360px,85vw);
   height:100vh;
+
   padding:25px;
-  background:white;
-  box-shadow:8px 0 30px rgba(0,0,0,.15);
+
+  background:rgba(255,255,255,.97);
+
+  box-shadow:
+    7px 0 25px rgba(60,80,100,.13);
+
   z-index:4999;
+
   overflow-y:auto;
+
   transition:left .25s ease;
 }
 
@@ -209,8 +265,9 @@ body{
 }
 
 .adminSection{
-  margin-bottom:25px;
-  padding-bottom:22px;
+  margin-bottom:23px;
+  padding-bottom:20px;
+
   border-bottom:1px solid #eee;
 }
 
@@ -219,7 +276,7 @@ body{
 }
 
 .adminSection h3{
-  margin:0 0 12px;
+  margin:0 0 11px;
   font-size:17px;
 }
 
@@ -227,11 +284,16 @@ body{
 .adminTextarea,
 .adminSelect{
   width:100%;
-  padding:11px;
+
+  padding:10px;
+
   margin-bottom:8px;
+
   border:1px solid #ddd;
-  border-radius:9px;
+  border-radius:8px;
+
   outline:none;
+
   font-family:inherit;
 }
 
@@ -243,18 +305,7 @@ body{
 .adminInput:focus,
 .adminTextarea:focus,
 .adminSelect:focus{
-  border-color:#94cfe1;
-}
-
-.adminButtons{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-.adminButtons button{
-  flex:1;
-  min-width:90px;
+  border-color:#94cbd9;
 }
 
 /* =========================
@@ -263,17 +314,23 @@ body{
 
 .contentBox{
   padding:25px;
-  background:rgba(255,255,255,.88);
-  border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+  background:rgba(255,255,255,.86);
+
+  border-radius:17px;
+
+  box-shadow:
+    0 8px 25px rgba(60,80,100,.08);
 }
 
 .toolbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
+
   gap:10px;
   margin-bottom:20px;
+
   flex-wrap:wrap;
 }
 
@@ -290,69 +347,99 @@ body{
 
 .card{
   position:relative;
-  min-height:150px;
-  padding:20px;
-  background:white;
-  border:1px solid #eee;
-  border-radius:14px;
-  box-shadow:0 5px 15px rgba(0,0,0,.05);
+
+  min-height:145px;
+  padding:19px;
+
+  background:#fff;
+
+  border:1px solid rgba(220,220,220,.8);
+  border-radius:13px;
+
+  box-shadow:
+    0 4px 13px rgba(60,80,100,.055);
+
   cursor:pointer;
+
   transition:.2s;
 }
 
 .card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 9px 22px rgba(0,0,0,.09);
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 7px 18px rgba(60,80,100,.08);
 }
 
 .folderIcon{
-  font-size:42px;
-  margin-bottom:12px;
+  font-size:40px;
+  margin-bottom:10px;
 }
 
 .card h3{
   margin:0;
+
   color:#111;
+
   font-size:18px;
+
   word-break:break-word;
 }
 
 .cardImage{
   width:100%;
   aspect-ratio:1/1;
+
   object-fit:cover;
-  border-radius:10px;
-  margin-bottom:12px;
+
+  border-radius:9px;
+
+  margin-bottom:11px;
+
   display:block;
 }
 
 .cardImagePlaceholder{
   width:100%;
   aspect-ratio:1/1;
-  border-radius:10px;
-  margin-bottom:12px;
-  background:linear-gradient(135deg,#f4f4f4,#eaeaea);
+
+  border-radius:9px;
+
+  margin-bottom:11px;
+
+  background:#f3f4f4;
+
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
+
   color:#aaa;
-  font-size:40px;
+  font-size:38px;
 }
 
 .cardActions{
   position:absolute;
-  top:10px;
-  right:10px;
+
+  top:9px;
+  right:9px;
+
   display:flex;
   gap:5px;
+
+  z-index:2;
 }
 
 .smallBtn{
   border:none;
-  border-radius:7px;
+
   padding:5px 8px;
-  background:#f1f1f1;
+
+  border-radius:7px;
+
+  background:#f0f0f0;
+
   cursor:pointer;
+
   font-size:12px;
 }
 
@@ -367,11 +454,15 @@ body{
 .modalBg{
   position:fixed;
   inset:0;
+
   display:none;
   align-items:center;
   justify-content:center;
+
   padding:20px;
-  background:rgba(0,0,0,.35);
+
+  background:rgba(0,0,0,.3);
+
   z-index:6000;
 }
 
@@ -382,17 +473,24 @@ body{
 .modal{
   width:min(650px,95vw);
   max-height:90vh;
+
   overflow-y:auto;
+
   padding:28px;
-  background:white;
-  border-radius:18px;
-  box-shadow:0 20px 50px rgba(0,0,0,.2);
+
+  background:#fff;
+
+  border-radius:17px;
+
+  box-shadow:
+    0 18px 50px rgba(50,70,90,.18);
 }
 
 .modalHeader{
   display:flex;
   justify-content:space-between;
   align-items:center;
+
   margin-bottom:20px;
 }
 
@@ -401,11 +499,14 @@ body{
 }
 
 .closeBtn{
-  border:none;
-  background:#eee;
-  border-radius:50%;
   width:34px;
   height:34px;
+
+  border:none;
+  border-radius:50%;
+
+  background:#eee;
+
   cursor:pointer;
 }
 
@@ -416,11 +517,15 @@ body{
 .detailOverlay{
   position:fixed;
   inset:0;
+
   display:none;
   align-items:center;
   justify-content:center;
+
   padding:5vh 10vw;
-  background:rgba(0,0,0,.45);
+
+  background:rgba(0,0,0,.4);
+
   z-index:7000;
 }
 
@@ -430,73 +535,101 @@ body{
 
 .detailPage{
   position:relative;
+
   width:80vw;
   height:90vh;
+
   overflow-y:auto;
+
   padding:40px;
-  background:white;
-  border-radius:18px;
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
+
+  background:#fff;
+
+  border-radius:17px;
+
+  box-shadow:
+    0 20px 55px rgba(40,60,80,.2);
 }
 
 .detailClose{
   position:absolute;
+
   top:15px;
   right:15px;
+
   width:38px;
   height:38px;
+
   border:none;
   border-radius:50%;
+
   background:#eee;
+
   cursor:pointer;
+
   font-size:18px;
-  z-index:2;
 }
 
 .detailTitle{
   margin:0 45px 25px 0;
+
   color:#111;
+
   font-size:32px;
 }
 
 .detailImage{
   width:100%;
   max-height:420px;
+
   object-fit:contain;
+
   display:block;
+
   margin:0 auto 25px;
-  border-radius:12px;
-  background:#f7f7f7;
+
+  border-radius:10px;
+
+  background:#f6f6f6;
 }
 
 .infoTable{
   width:100%;
+
   border-collapse:collapse;
+
   margin-top:20px;
 }
 
 .infoTable th,
 .infoTable td{
   border:1px solid #ddd;
+
   padding:12px;
+
   text-align:left;
   vertical-align:top;
 }
 
 .infoTable th{
   width:130px;
-  background:#f2f2f2;
+
+  background:#f1f1f1;
+
   font-weight:700;
 }
 
 .extraTitle{
   margin-top:30px;
+
   padding-bottom:8px;
+
   border-bottom:2px solid #ddd;
 }
 
 .extraText{
   white-space:pre-wrap;
+
   line-height:1.7;
 }
 
@@ -510,8 +643,11 @@ body{
 
 .formGroup label{
   display:block;
+
   margin-bottom:6px;
+
   font-weight:700;
+
   font-size:14px;
 }
 
@@ -519,22 +655,20 @@ body{
 .formGroup textarea,
 .formGroup select{
   width:100%;
-  padding:11px;
+
+  padding:10px;
+
   border:1px solid #ddd;
-  border-radius:9px;
+  border-radius:8px;
+
   outline:none;
+
   font-family:inherit;
 }
 
 .formGroup textarea{
   min-height:100px;
   resize:vertical;
-}
-
-.formGroup input:focus,
-.formGroup textarea:focus,
-.formGroup select:focus{
-  border-color:#94cfe1;
 }
 
 .fileInfo{
@@ -544,7 +678,7 @@ body{
 }
 
 /* =========================
-   반응형
+   모바일
 ========================= */
 
 @media(max-width:900px){
@@ -568,14 +702,12 @@ body{
   .detailPage{
     width:100vw;
     height:100vh;
+
     border-radius:0;
+
     padding:30px 20px;
   }
 
-  .detailClose{
-    top:12px;
-    right:12px;
-  }
 }
 
 @media(max-width:600px){
@@ -626,6 +758,7 @@ body{
     padding:9px;
     font-size:14px;
   }
+
 }
 </style>
 </head>
@@ -633,7 +766,7 @@ body{
 <body>
 
 <!-- =========================
-     비밀번호 화면
+     입장
 ========================= -->
 
 <div id="lockScreen">
@@ -678,9 +811,7 @@ body{
   <button
     class="adminToggle"
     onclick="toggleAdminPanel()"
-  >
-    &gt;
-  </button>
+  >&gt;</button>
 
 
   <!-- 관리자 패널 -->
@@ -732,7 +863,7 @@ body{
       style="display:none;"
     >
 
-      <!-- ★ 제목 / 소제목 수정 -->
+      <!-- 제목/소제목 수정 -->
 
       <div class="adminSection">
 
@@ -755,6 +886,7 @@ body{
         <button
           class="gradientBtn"
           onclick="saveSiteInfo()"
+          style="width:100%;"
         >
           제목 / 소제목 저장
         </button>
@@ -762,7 +894,7 @@ body{
       </div>
 
 
-      <!-- 폴더 -->
+      <!-- 폴더 관리 -->
 
       <div class="adminSection">
 
@@ -778,6 +910,7 @@ body{
         <button
           class="gradientBtn"
           onclick="createFolder()"
+          style="width:100%;"
         >
           폴더 만들기
         </button>
@@ -785,7 +918,7 @@ body{
       </div>
 
 
-      <!-- 자료 -->
+      <!-- 자료 관리 -->
 
       <div class="adminSection">
 
@@ -819,7 +952,7 @@ body{
   </aside>
 
 
-  <!-- 헤더 -->
+  <!-- 메인 내용 -->
 
   <main class="wrap">
 
@@ -856,7 +989,6 @@ body{
 
       </div>
 
-
       <div
         id="grid"
         class="grid"
@@ -870,7 +1002,7 @@ body{
 
 
 <!-- =========================
-     자료 추가/수정 모달
+     자료 추가/수정
 ========================= -->
 
 <div
@@ -947,6 +1079,7 @@ body{
     </div>
 
     <div class="formGroup">
+
       <label>대표 이미지</label>
 
       <input
@@ -956,7 +1089,7 @@ body{
       >
 
       <div class="fileInfo">
-        새 이미지를 선택하면 기존 이미지를 교체합니다.
+        새 이미지를 선택하면 기존 이미지가 교체됩니다.
       </div>
 
     </div>
@@ -1000,8 +1133,9 @@ body{
 
 
 <script>
+
 /* =========================================================
-   기본 설정
+   비밀번호
 ========================================================= */
 
 const SITE_PASSWORD = "1234";
@@ -1010,7 +1144,7 @@ const ADMIN_PASSWORD = "Leeafnatureminna0103399";
 
 
 /* =========================================================
-   Supabase 설정
+   Supabase
 ========================================================= */
 
 const SUPABASE_URL = "여기에_Project_URL";
@@ -1025,21 +1159,19 @@ let supabaseClient = null;
 
 let data = {
 
-  site: {
-    title: "이펙필드 아카데미",
+  site:{
+    title:"이펙필드 아카데미",
 
     subtitle:
       "초능력을 올바른 곳에 사용하는 것을 목적으로 하는 다양한 분야의 아카데미"
   },
 
-  folders: [
-
+  folders:[
     {
       id:"root",
       name:"전체 자료",
       parent:null
     }
-
   ],
 
   items:[]
@@ -1074,7 +1206,6 @@ function initSupabase(){
     return false;
   }
 
-
   if(
     !window.supabase ||
     !window.supabase.createClient
@@ -1086,7 +1217,6 @@ function initSupabase(){
 
     return false;
   }
-
 
   try{
 
@@ -1103,13 +1233,14 @@ function initSupabase(){
     console.error(error);
 
     return false;
+
   }
 
 }
 
 
 /* =========================================================
-   비밀번호 입장
+   입장
 ========================================================= */
 
 function unlock(){
@@ -1156,8 +1287,6 @@ function unlock(){
 }
 
 
-/* 엔터키 */
-
 document
   .getElementById("passwordInput")
   .addEventListener("keydown",function(e){
@@ -1170,7 +1299,7 @@ document
 
 
 /* =========================================================
-   Supabase 데이터 불러오기
+   데이터 불러오기
 ========================================================= */
 
 async function loadData(){
@@ -1207,20 +1336,19 @@ async function loadData(){
 
       data = row.data;
 
-      /* 이전 버전 데이터와 호환 */
+    }
 
-      if(!data.site){
 
-        data.site = {
+    if(!data.site){
 
-          title:"이펙필드 아카데미",
+      data.site = {
 
-          subtitle:
-            "초능력을 올바른 곳에 사용하는 것을 목적으로 하는 다양한 분야의 아카데미"
+        title:"이펙필드 아카데미",
 
-        };
+        subtitle:
+          "초능력을 올바른 곳에 사용하는 것을 목적으로 하는 다양한 분야의 아카데미"
 
-      }
+      };
 
     }
 
@@ -1247,7 +1375,7 @@ async function saveData(){
   if(!supabaseClient){
 
     console.warn(
-      "Supabase가 설정되지 않아 데이터가 저장되지 않았습니다."
+      "Supabase가 설정되지 않았습니다."
     );
 
     return false;
@@ -1274,11 +1402,10 @@ async function saveData(){
 
       console.error(error);
 
-      alert(
-        "저장 중 오류가 발생했습니다."
-      );
+      alert("저장 중 오류가 발생했습니다.");
 
       return false;
+
     }
 
 
@@ -1296,7 +1423,7 @@ async function saveData(){
 
 
 /* =========================================================
-   HTML 보안 처리
+   HTML 처리
 ========================================================= */
 
 function escapeHTML(value){
@@ -1329,20 +1456,16 @@ function toggleAdminPanel(){
 
 
 /* =========================================================
-   관리자 모드 시작
+   관리자 로그인
 ========================================================= */
 
 function enableAdmin(){
 
   const input =
-    document.getElementById(
-      "adminPasswordInput"
-    );
+    document.getElementById("adminPasswordInput");
 
   const error =
-    document.getElementById(
-      "adminError"
-    );
+    document.getElementById("adminError");
 
 
   if(input.value === ADMIN_PASSWORD){
@@ -1360,16 +1483,16 @@ function enableAdmin(){
       .style.display = "block";
 
 
-    /* 현재 제목을 입력창에 표시 */
-
     document
       .getElementById("siteTitleInput")
-      .value = data.site.title;
+      .value =
+        data.site.title;
 
 
     document
       .getElementById("siteSubtitleInput")
-      .value = data.site.subtitle;
+      .value =
+        data.site.subtitle;
 
 
     render();
@@ -1388,8 +1511,6 @@ function enableAdmin(){
 }
 
 
-/* 엔터로 관리자 로그인 */
-
 document
   .getElementById("adminPasswordInput")
   .addEventListener("keydown",function(e){
@@ -1402,28 +1523,24 @@ document
 
 
 /* =========================================================
-   관리자 모드 종료
+   관리자 종료
 ========================================================= */
 
 function disableAdmin(){
 
   adminMode = false;
 
-
   document
     .getElementById("adminLoginSection")
     .style.display = "block";
-
 
   document
     .getElementById("adminTools")
     .style.display = "none";
 
-
   document
     .getElementById("adminPasswordInput")
     .value = "";
-
 
   render();
 
@@ -1431,7 +1548,7 @@ function disableAdmin(){
 
 
 /* =========================================================
-   ★ 사이트 제목 / 소제목 수정
+   ★ 제목 / 소제목 수정
 ========================================================= */
 
 async function saveSiteInfo(){
@@ -1479,13 +1596,15 @@ async function saveSiteInfo(){
   applySiteInfo();
 
 
-  const success =
+  const saved =
     await saveData();
 
 
-  if(success){
+  if(saved){
 
-    alert("제목과 소제목이 저장되었습니다.");
+    alert(
+      "제목과 소제목이 저장되었습니다."
+    );
 
   }
 
@@ -1493,7 +1612,7 @@ async function saveSiteInfo(){
 
 
 /* =========================================================
-   사이트 제목 화면 적용
+   제목 화면 적용
 ========================================================= */
 
 function applySiteInfo(){
@@ -1517,7 +1636,7 @@ function applySiteInfo(){
 
 
 /* =========================================================
-   폴더 찾기
+   폴더
 ========================================================= */
 
 function getFolder(id){
@@ -1528,10 +1647,6 @@ function getFolder(id){
 
 }
 
-
-/* =========================================================
-   현재 폴더 경로
-========================================================= */
 
 function getBreadcrumb(folderId){
 
@@ -1560,11 +1675,7 @@ function getBreadcrumb(folderId){
 }
 
 
-/* =========================================================
-   폴더 만들기
-========================================================= */
-
-async function createFolder(){
+function createFolder(){
 
   if(!adminMode){
     return;
@@ -1572,9 +1683,7 @@ async function createFolder(){
 
 
   const input =
-    document.getElementById(
-      "folderNameInput"
-    );
+    document.getElementById("folderNameInput");
 
 
   const name =
@@ -1604,17 +1713,12 @@ async function createFolder(){
 
   input.value = "";
 
-
   render();
 
-  await saveData();
+  saveData();
 
 }
 
-
-/* =========================================================
-   폴더 이름 수정
-========================================================= */
 
 async function renameFolder(id){
 
@@ -1625,7 +1729,9 @@ async function renameFolder(id){
 
   if(id === "root"){
 
-    alert("전체 자료 폴더는 수정할 수 없습니다.");
+    alert(
+      "전체 자료 폴더는 수정할 수 없습니다."
+    );
 
     return;
   }
@@ -1633,11 +1739,6 @@ async function renameFolder(id){
 
   const folder =
     getFolder(id);
-
-
-  if(!folder){
-    return;
-  }
 
 
   const newName =
@@ -1651,7 +1752,6 @@ async function renameFolder(id){
     newName === null ||
     !newName.trim()
   ){
-
     return;
   }
 
@@ -1667,10 +1767,6 @@ async function renameFolder(id){
 }
 
 
-/* =========================================================
-   폴더 삭제
-========================================================= */
-
 async function deleteFolder(id){
 
   if(!adminMode){
@@ -1680,7 +1776,9 @@ async function deleteFolder(id){
 
   if(id === "root"){
 
-    alert("전체 자료 폴더는 삭제할 수 없습니다.");
+    alert(
+      "전체 자료 폴더는 삭제할 수 없습니다."
+    );
 
     return;
   }
@@ -1690,12 +1788,7 @@ async function deleteFolder(id){
     getFolder(id);
 
 
-  if(!folder){
-    return;
-  }
-
-
-  const hasChildFolder =
+  const hasChild =
     data.folders.some(
       f => f.parent === id
     );
@@ -1707,7 +1800,7 @@ async function deleteFolder(id){
     );
 
 
-  if(hasChildFolder || hasItems){
+  if(hasChild || hasItems){
 
     alert(
       "폴더 안에 자료가 있거나 하위 폴더가 있어서 삭제할 수 없습니다."
@@ -1722,7 +1815,6 @@ async function deleteFolder(id){
       `"${folder.name}" 폴더를 삭제할까요?`
     )
   ){
-
     return;
   }
 
@@ -1748,10 +1840,6 @@ async function deleteFolder(id){
 }
 
 
-/* =========================================================
-   폴더 열기
-========================================================= */
-
 function openFolder(id){
 
   currentFolder = id;
@@ -1761,20 +1849,13 @@ function openFolder(id){
 }
 
 
-/* =========================================================
-   이전 폴더
-========================================================= */
-
 function goBack(){
 
   const folder =
     getFolder(currentFolder);
 
 
-  if(
-    folder &&
-    folder.parent
-  ){
+  if(folder && folder.parent){
 
     currentFolder =
       folder.parent;
@@ -1792,7 +1873,7 @@ function goBack(){
 
 
 /* =========================================================
-   자료 추가 모달
+   자료 모달
 ========================================================= */
 
 function openItemModal(id=null){
@@ -1866,14 +1947,9 @@ function openItemModal(id=null){
 }
 
 
-/* =========================================================
-   자료 폼 초기화
-========================================================= */
-
 function clearItemForm(){
 
-  const ids = [
-
+  [
     "itemName",
     "itemGrade",
     "itemInfo",
@@ -1885,20 +1961,13 @@ function clearItemForm(){
     "itemRelations",
     "itemExtra",
     "itemImage"
+  ].forEach(id => {
 
-  ];
-
-
-  ids.forEach(id => {
-
-    const element =
+    const el =
       document.getElementById(id);
 
-
-    if(element){
-
-      element.value = "";
-
+    if(el){
+      el.value = "";
     }
 
   });
@@ -1906,16 +1975,11 @@ function clearItemForm(){
 }
 
 
-/* =========================================================
-   자료 모달 닫기
-========================================================= */
-
 function closeItemModal(){
 
   document
     .getElementById("itemModalBg")
     .classList.remove("show");
-
 
   editingId = null;
 
@@ -1963,10 +2027,7 @@ async function uploadImage(file){
         .from("academy-images")
         .upload(
           fileName,
-          file,
-          {
-            upsert:false
-          }
+          file
         );
 
 
@@ -2088,7 +2149,8 @@ async function saveItem(){
 
 
   const file =
-    document.getElementById("itemImage")
+    document
+      .getElementById("itemImage")
       .files[0];
 
 
@@ -2099,10 +2161,7 @@ async function saveItem(){
 
 
     if(imageUrl){
-
-      item.image =
-        imageUrl;
-
+      item.image = imageUrl;
     }
 
   }
@@ -2144,7 +2203,6 @@ async function deleteItem(id){
       `"${item.name}" 자료를 삭제할까요?`
     )
   ){
-
     return;
   }
 
@@ -2163,7 +2221,7 @@ async function deleteItem(id){
 
 
 /* =========================================================
-   상세 보기
+   상세 페이지
 ========================================================= */
 
 function openDetail(id){
@@ -2179,24 +2237,25 @@ function openDetail(id){
   }
 
 
-  let html = "";
+  let html = `
 
-
-  html += `
     <h1 class="detailTitle">
       ${escapeHTML(item.name)}
     </h1>
+
   `;
 
 
   if(item.image){
 
     html += `
+
       <img
         class="detailImage"
         src="${escapeHTML(item.image)}"
         alt="${escapeHTML(item.name)}"
       >
+
     `;
 
   }
@@ -2243,7 +2302,9 @@ function openDetail(id){
     validRows.forEach(row => {
 
       html += `
+
         <tr>
+
           <th>
             ${escapeHTML(row[0])}
           </th>
@@ -2251,7 +2312,9 @@ function openDetail(id){
           <td>
             ${escapeHTML(row[1])}
           </td>
+
         </tr>
+
       `;
 
     });
@@ -2271,6 +2334,7 @@ function openDetail(id){
   ){
 
     html += `
+
       <h2 class="extraTitle">
         추가 설명
       </h2>
@@ -2278,6 +2342,7 @@ function openDetail(id){
       <div class="extraText">
         ${escapeHTML(item.extra)}
       </div>
+
     `;
 
   }
@@ -2295,10 +2360,6 @@ function openDetail(id){
 }
 
 
-/* =========================================================
-   상세 닫기
-========================================================= */
-
 function closeDetail(){
 
   document
@@ -2309,7 +2370,7 @@ function closeDetail(){
 
 
 /* =========================================================
-   화면 렌더링
+   렌더링
 ========================================================= */
 
 function render(){
@@ -2324,8 +2385,6 @@ function render(){
   grid.innerHTML = "";
 
 
-  /* 현재 경로 */
-
   const breadcrumb =
     getBreadcrumb(currentFolder);
 
@@ -2337,11 +2396,11 @@ function render(){
         .map(
           (folder,index) => {
 
-            const isLast =
+            const last =
               index === breadcrumb.length - 1;
 
 
-            if(isLast){
+            if(last){
 
               return `
                 <strong>
@@ -2353,21 +2412,22 @@ function render(){
 
 
             return `
+
               <span
                 style="cursor:pointer;"
                 onclick="openFolder('${folder.id}')"
               >
                 ${escapeHTML(folder.name)}
               </span>
+
               <span> / </span>
+
             `;
 
           }
         )
         .join("");
 
-
-  /* 이전 버튼 */
 
   const current =
     getFolder(currentFolder);
@@ -2381,8 +2441,6 @@ function render(){
         ? "block"
         : "none";
 
-
-  /* 하위 폴더 */
 
   const folders =
     data.folders.filter(
@@ -2406,23 +2464,31 @@ function render(){
     if(adminMode){
 
       actions = `
+
         <div class="cardActions">
 
           <button
             class="smallBtn"
-            onclick="event.stopPropagation();renameFolder('${folder.id}')"
+            onclick="
+              event.stopPropagation();
+              renameFolder('${folder.id}')
+            "
           >
             수정
           </button>
 
           <button
             class="smallBtn"
-            onclick="event.stopPropagation();deleteFolder('${folder.id}')"
+            onclick="
+              event.stopPropagation();
+              deleteFolder('${folder.id}')
+            "
           >
             삭제
           </button>
 
         </div>
+
       `;
 
     }
@@ -2432,9 +2498,7 @@ function render(){
 
       ${actions}
 
-      <div
-        class="folderIcon"
-      >
+      <div class="folderIcon">
         📁
       </div>
 
@@ -2445,16 +2509,14 @@ function render(){
     `;
 
 
-    card.onclick = () =>
-      openFolder(folder.id);
+    card.onclick =
+      () => openFolder(folder.id);
 
 
     grid.appendChild(card);
 
   });
 
-
-  /* 자료 */
 
   const items =
     data.items.filter(
@@ -2478,23 +2540,31 @@ function render(){
     if(adminMode){
 
       actions = `
+
         <div class="cardActions">
 
           <button
             class="smallBtn"
-            onclick="event.stopPropagation();openItemModal('${item.id}')"
+            onclick="
+              event.stopPropagation();
+              openItemModal('${item.id}')
+            "
           >
             수정
           </button>
 
           <button
             class="smallBtn"
-            onclick="event.stopPropagation();deleteItem('${item.id}')"
+            onclick="
+              event.stopPropagation();
+              deleteItem('${item.id}')
+            "
           >
             삭제
           </button>
 
         </div>
+
       `;
 
     }
@@ -2506,19 +2576,23 @@ function render(){
     if(item.image){
 
       imageHTML = `
+
         <img
           class="cardImage"
           src="${escapeHTML(item.image)}"
           alt="${escapeHTML(item.name)}"
         >
+
       `;
 
     }else{
 
       imageHTML = `
+
         <div class="cardImagePlaceholder">
           ✦
         </div>
+
       `;
 
     }
@@ -2537,16 +2611,14 @@ function render(){
     `;
 
 
-    card.onclick = () =>
-      openDetail(item.id);
+    card.onclick =
+      () => openDetail(item.id);
 
 
     grid.appendChild(card);
 
   });
 
-
-  /* 아무것도 없을 때 */
 
   if(
     folders.length === 0 &&
@@ -2581,28 +2653,27 @@ function render(){
 
 
 /* =========================================================
-   ESC로 닫기
+   ESC
 ========================================================= */
 
 document.addEventListener(
   "keydown",
   function(e){
 
-    if(e.key !== "Escape"){
-      return;
+    if(e.key === "Escape"){
+
+      closeDetail();
+
+      closeItemModal();
+
     }
-
-
-    closeDetail();
-
-    closeItemModal();
 
   }
 );
 
 
 /* =========================================================
-   초기 화면
+   시작
 ========================================================= */
 
 document.addEventListener(
@@ -2615,7 +2686,9 @@ document.addEventListener(
 
   }
 );
+
 </script>
 
 </body>
 </html>
+```
