@@ -1,257 +1,384 @@
-```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>이펙필드 아카데미</title>
 
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
+/* =========================================================
+   기본 색상
+========================================================= */
+
 :root{
   --green:#9CD098;
   --cyan:#94D3E1;
   --blue:#9FB6FC;
-  --pink:#ff8fb1;
 
-  /* 기존의 부드러운 색감 유지 */
-  --main-gradient:
+  --text:#26334a;
+  --sub:#718096;
+
+  --border:#dce4ef;
+
+  --gradient:
     linear-gradient(
       135deg,
       #9CD098 0%,
-      #94D3E1 38%,
-      #9FB6FC 72%,
-      #94D3E1 88%,
+      #94D3E1 35%,
+      #9FB6FC 65%,
+      #94D3E1 85%,
       #9CD098 100%
     );
+
+  --button-gradient:
+    linear-gradient(
+      90deg,
+      #9CD098,
+      #94D3E1,
+      #9FB6FC
+    );
 }
+
+
+/* =========================================================
+   전체
+========================================================= */
 
 *{
   box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
   margin:0;
   padding:0;
   min-height:100%;
+}
+
+body{
   font-family:
     Arial,
     "Noto Sans KR",
     sans-serif;
-  color:#222;
-}
 
-body{
+  color:var(--text);
+
   background:
     linear-gradient(
       135deg,
-      #9CD098 0%,
-      #94D3E1 38%,
-      #9FB6FC 72%,
-      #94D3E1 88%,
-      #9CD098 100%
+      rgba(156,208,152,.38),
+      rgba(148,211,225,.38),
+      rgba(159,182,252,.38),
+      rgba(148,211,225,.38),
+      rgba(156,208,152,.38)
     );
+
   background-attachment:fixed;
 }
 
-/* =========================
-   버튼
-========================= */
+body.detailOpen{
+  overflow:hidden;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+
+/* =========================================================
+   공통 버튼
+========================================================= */
 
 .gradientBtn{
-  border:none;
-  border-radius:9px;
-  padding:10px 16px;
+  border:0;
 
-  background:
-    linear-gradient(
-      135deg,
-      #9CD098,
-      #94D3E1,
-      #9FB6FC
-    );
+  background:var(--button-gradient);
 
-  color:#222;
-  font-weight:700;
+  color:white;
+
+  font-weight:600;
+
+  border-radius:10px;
+
+  padding:10px 17px;
+
   cursor:pointer;
-  transition:.2s;
+
+  box-shadow:
+    0 4px 12px rgba(120,150,200,.16);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    filter .15s ease;
 }
 
 .gradientBtn:hover{
-  filter:brightness(1.02);
-  transform:translateY(-1px);
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 7px 17px rgba(120,150,200,.25);
+
+  filter:saturate(1.05);
 }
 
-/* =========================
-   입장 화면
-========================= */
+.gradientBtn:active{
+  transform:translateY(0);
+}
+
+
+/* =========================================================
+   처음 비밀번호 화면
+========================================================= */
 
 #lockScreen{
   position:fixed;
+
   inset:0;
 
+  z-index:99999;
+
   display:flex;
+
   justify-content:center;
   align-items:center;
+
+  padding:20px;
 
   background:
     linear-gradient(
       135deg,
       #9CD098 0%,
-      #94D3E1 38%,
-      #9FB6FC 72%,
-      #94D3E1 88%,
+      #94D3E1 35%,
+      #9FB6FC 65%,
+      #94D3E1 85%,
       #9CD098 100%
     );
-
-  z-index:9999;
 }
 
 .lockBox{
-  width:min(400px,90vw);
-  padding:35px;
+  width:min(410px,90vw);
 
-  background:rgba(255,255,255,.9);
-  border-radius:18px;
+  padding:40px 34px;
+
+  background:rgba(255,255,255,.96);
+
+  border-radius:20px;
 
   box-shadow:
-    0 12px 35px rgba(70,100,120,.12);
+    0 18px 50px rgba(50,70,100,.18);
 
   text-align:center;
 }
 
-.lockBox h2{
-  margin:0 0 10px;
-  font-size:25px;
+.lockBox h1{
+  margin:0;
+
+  color:#111827;
+
+  font-size:28px;
+
+  letter-spacing:-.5px;
 }
 
 .lockBox p{
-  margin:0 0 20px;
-  color:#666;
+  margin:12px 0 24px;
+
+  color:var(--sub);
+
+  font-size:14px;
 }
 
 .lockInput{
   width:100%;
-  padding:12px;
 
-  border:1px solid #ddd;
-  border-radius:9px;
+  height:48px;
+
+  padding:0 15px;
+
+  border:1px solid var(--border);
+
+  border-radius:10px;
 
   outline:none;
-  font-size:15px;
+
+  text-align:center;
+
+  background:#fff;
+
+  transition:.2s;
+}
+
+.lockInput:focus{
+  border-color:#9FB6FC;
+
+  box-shadow:
+    0 0 0 3px rgba(159,182,252,.16);
 }
 
 .lockButton{
   width:100%;
-  margin-top:9px;
+
+  height:48px;
+
+  margin-top:12px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:var(--button-gradient);
+
+  color:white;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:.15s;
+}
+
+.lockButton:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 7px 18px rgba(120,150,200,.25);
 }
 
 .errorText{
   min-height:20px;
-  margin-top:9px;
 
-  color:#ff75a2;
+  margin-top:12px;
+
+  color:#ec6fa3;
+
   font-size:14px;
-  font-weight:600;
 }
 
-/* =========================
-   메인
-========================= */
+
+/* =========================================================
+   메인 전체
+========================================================= */
 
 .mainPage{
-  display:none;
+  width:100%;
+
   min-height:100vh;
-  padding:45px 0;
+
+  padding:55px 0 80px;
 }
 
 .wrap{
   width:80%;
+
   max-width:1180px;
+
   margin:0 auto;
 }
 
+
+/* =========================================================
+   상단 제목
+========================================================= */
+
 .hero{
   text-align:center;
-  margin-bottom:28px;
+
+  margin-bottom:35px;
 }
 
 .hero h1{
   margin:0;
 
-  color:#000;
+  color:#111827;
 
   font-size:42px;
-  line-height:1.25;
+
+  font-weight:800;
+
+  letter-spacing:-1.5px;
 }
 
 .hero p{
-  margin:9px 0 0;
+  margin:12px 0 0;
 
-  color:#333;
-  font-size:16px;
+  color:#667085;
+
+  font-size:15px;
 }
 
-/* =========================
-   관리자 열기 버튼
-========================= */
+
+/* =========================================================
+   관리자 버튼
+========================================================= */
 
 .adminToggle{
   position:fixed;
+
   left:0;
   top:50%;
 
   transform:translateY(-50%);
 
-  width:35px;
+  width:34px;
   height:68px;
 
-  border:none;
-  border-radius:0 10px 10px 0;
+  border:0;
 
-  background:
-    linear-gradient(
-      135deg,
-      #9CD098,
-      #94D3E1,
-      #9FB6FC
-    );
+  border-radius:0 12px 12px 0;
 
-  color:#222;
-  font-size:23px;
+  background:var(--button-gradient);
+
+  color:white;
+
+  font-size:18px;
 
   cursor:pointer;
 
   z-index:5000;
 
   box-shadow:
-    3px 3px 12px rgba(60,80,100,.1);
+    0 5px 18px rgba(80,100,140,.2);
 }
 
-/* =========================
+.adminToggle:hover{
+  width:39px;
+}
+
+
+/* =========================================================
    관리자 패널
-========================= */
+========================================================= */
 
 .adminPanel{
   position:fixed;
 
-  left:-380px;
+  left:-360px;
   top:0;
 
-  width:min(360px,85vw);
+  width:20vw;
+
+  min-width:260px;
+  max-width:360px;
+
   height:100vh;
 
-  padding:25px;
+  padding:30px 23px;
 
-  background:rgba(255,255,255,.97);
+  background:rgba(255,255,255,.98);
 
   box-shadow:
-    7px 0 25px rgba(60,80,100,.13);
+    8px 0 35px rgba(30,50,80,.15);
 
   z-index:4999;
-
-  overflow-y:auto;
 
   transition:left .25s ease;
 }
@@ -261,209 +388,307 @@ body{
 }
 
 .adminPanel h2{
-  margin:0 0 20px;
+  margin-top:0;
+
+  color:#111827;
 }
 
-.adminSection{
-  margin-bottom:23px;
-  padding-bottom:20px;
+.adminPanel p{
+  color:var(--sub);
 
-  border-bottom:1px solid #eee;
+  font-size:13px;
+
+  line-height:1.6;
 }
 
-.adminSection:last-child{
-  border-bottom:none;
-}
-
-.adminSection h3{
-  margin:0 0 11px;
-  font-size:17px;
-}
-
-.adminInput,
-.adminTextarea,
-.adminSelect{
+.adminPanel input{
   width:100%;
+
+  height:44px;
+
+  padding:0 12px;
+
+  border:1px solid var(--border);
+
+  border-radius:10px;
+
+  outline:none;
+}
+
+.adminPanel button{
+  width:100%;
+
+  margin-top:10px;
+
+  height:43px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:var(--button-gradient);
+
+  color:white;
+
+  cursor:pointer;
+
+  font-weight:600;
+}
+
+.adminStatus{
+  margin-top:15px;
 
   padding:10px;
 
-  margin-bottom:8px;
+  border-radius:9px;
 
-  border:1px solid #ddd;
-  border-radius:8px;
+  background:#f5f7fb;
 
-  outline:none;
+  color:var(--sub);
 
-  font-family:inherit;
+  font-size:13px;
+
+  text-align:center;
 }
 
-.adminTextarea{
-  min-height:90px;
-  resize:vertical;
-}
 
-.adminInput:focus,
-.adminTextarea:focus,
-.adminSelect:focus{
-  border-color:#94cbd9;
-}
+/* =========================================================
+   생성 패널
+========================================================= */
 
-/* =========================
-   콘텐츠
-========================= */
+.createPanel{
+  display:none;
 
-.contentBox{
-  padding:25px;
+  margin-bottom:22px;
 
-  background:rgba(255,255,255,.86);
+  padding:18px;
 
-  border-radius:17px;
+  background:rgba(255,255,255,.82);
+
+  border:1px solid rgba(255,255,255,.8);
+
+  border-radius:15px;
 
   box-shadow:
-    0 8px 25px rgba(60,80,100,.08);
+    0 5px 20px rgba(80,100,130,.07);
 }
+
+.createPanel.active{
+  display:flex;
+
+  gap:10px;
+}
+
+
+/* =========================================================
+   툴바
+========================================================= */
 
 .toolbar{
   display:flex;
-  justify-content:space-between;
+
   align-items:center;
 
-  gap:10px;
-  margin-bottom:20px;
+  justify-content:space-between;
 
-  flex-wrap:wrap;
+  gap:15px;
+
+  margin-bottom:18px;
 }
 
-.path{
-  color:#555;
+.homeButton{
+  border:0;
+
+  border-radius:10px;
+
+  padding:9px 15px;
+
+  background:white;
+
+  color:#344054;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 3px 12px rgba(50,70,100,.07);
+}
+
+.homeButton:hover{
+  background:#f9fafc;
+}
+
+.currentPath{
+  color:#758195;
+
   font-size:14px;
+}
+
+
+/* =========================================================
+   자료 영역
+========================================================= */
+
+.contentBox{
+  background:rgba(255,255,255,.84);
+
+  border:1px solid rgba(255,255,255,.9);
+
+  border-radius:18px;
+
+  padding:25px;
+
+  box-shadow:
+    0 10px 35px rgba(60,80,110,.08);
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:20px;
 }
 
+
+/* =========================================================
+   카드
+========================================================= */
+
 .card{
-  position:relative;
+  overflow:hidden;
 
-  min-height:145px;
-  padding:19px;
+  background:white;
 
-  background:#fff;
+  border:1px solid #e4e9f0;
 
-  border:1px solid rgba(220,220,220,.8);
-  border-radius:13px;
+  border-radius:14px;
 
   box-shadow:
-    0 4px 13px rgba(60,80,100,.055);
+    0 5px 18px rgba(50,70,100,.06);
 
-  cursor:pointer;
-
-  transition:.2s;
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
 }
 
 .card:hover{
-  transform:translateY(-2px);
+  transform:translateY(-3px);
 
   box-shadow:
-    0 7px 18px rgba(60,80,100,.08);
+    0 10px 25px rgba(50,70,100,.11);
 }
 
-.folderIcon{
-  font-size:40px;
-  margin-bottom:10px;
-}
-
-.card h3{
-  margin:0;
-
-  color:#111;
-
-  font-size:18px;
-
-  word-break:break-word;
-}
-
-.cardImage{
+.thumb{
   width:100%;
-  aspect-ratio:1/1;
+
+  aspect-ratio:1 / 1;
+
+  background:#f1f4f8;
+
+  cursor:pointer;
+
+  overflow:hidden;
+}
+
+.thumb img{
+  width:100%;
+  height:100%;
 
   object-fit:cover;
-
-  border-radius:9px;
-
-  margin-bottom:11px;
 
   display:block;
 }
 
-.cardImagePlaceholder{
+.folderThumb{
   width:100%;
-  aspect-ratio:1/1;
-
-  border-radius:9px;
-
-  margin-bottom:11px;
-
-  background:#f3f4f4;
+  height:100%;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
-  color:#aaa;
-  font-size:38px;
+  font-size:52px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(156,208,152,.18),
+      rgba(148,211,225,.18),
+      rgba(159,182,252,.18)
+    );
 }
 
-.cardActions{
-  position:absolute;
+.cardbody{
+  padding:15px;
+}
 
-  top:9px;
-  right:9px;
+.cardbody h3{
+  margin:0;
 
+  color:#111827;
+
+  font-size:17px;
+
+  font-weight:700;
+}
+
+.cardbody p{
+  margin:7px 0 0;
+
+  color:#788397;
+
+  font-size:13px;
+}
+
+.cardactions{
   display:flex;
-  gap:5px;
 
-  z-index:2;
+  gap:7px;
+
+  margin-top:12px;
 }
 
-.smallBtn{
-  border:none;
+.cardactions button{
+  flex:1;
 
-  padding:5px 8px;
+  border:0;
 
-  border-radius:7px;
+  border-radius:8px;
 
-  background:#f0f0f0;
+  padding:7px;
 
-  cursor:pointer;
+  background:var(--button-gradient);
+
+  color:white;
 
   font-size:12px;
+
+  cursor:pointer;
 }
 
-.smallBtn:hover{
-  background:#e5e5e5;
-}
 
-/* =========================
+/* =========================================================
    모달
-========================= */
+========================================================= */
 
 .modalBg{
+  display:none;
+
   position:fixed;
+
   inset:0;
 
-  display:none;
+  z-index:7000;
+
+  padding:30px;
+
+  background:rgba(25,35,55,.35);
+
   align-items:center;
+
   justify-content:center;
-
-  padding:20px;
-
-  background:rgba(0,0,0,.3);
-
-  z-index:6000;
 }
 
 .modalBg.show{
@@ -471,62 +696,137 @@ body{
 }
 
 .modal{
-  width:min(650px,95vw);
-  max-height:90vh;
+  width:min(700px,90vw);
 
-  overflow-y:auto;
+  max-height:88vh;
+
+  overflow:auto;
 
   padding:28px;
 
-  background:#fff;
+  background:white;
 
-  border-radius:17px;
+  border-radius:18px;
 
   box-shadow:
-    0 18px 50px rgba(50,70,90,.18);
+    0 20px 60px rgba(20,30,50,.2);
 }
 
-.modalHeader{
+.modal h2{
+  margin-top:0;
+
+  color:#111827;
+}
+
+.formGrid{
+  display:grid;
+
+  gap:15px;
+}
+
+.row label{
+  display:block;
+
+  margin-bottom:6px;
+
+  color:#344054;
+
+  font-size:13px;
+
+  font-weight:700;
+}
+
+.row input,
+.row textarea,
+.row select{
+  width:100%;
+
+  padding:10px 12px;
+
+  border:1px solid var(--border);
+
+  border-radius:9px;
+
+  outline:none;
+
+  background:#fff;
+}
+
+.row input:focus,
+.row textarea:focus,
+.row select:focus{
+  border-color:#9FB6FC;
+
+  box-shadow:
+    0 0 0 3px rgba(159,182,252,.12);
+}
+
+.row textarea{
+  min-height:90px;
+
+  resize:vertical;
+}
+
+.modalfoot{
   display:flex;
-  justify-content:space-between;
-  align-items:center;
 
-  margin-bottom:20px;
+  justify-content:flex-end;
+
+  gap:9px;
+
+  margin-top:20px;
 }
 
-.modalHeader h2{
-  margin:0;
-}
+.modalfoot button{
+  border:0;
 
-.closeBtn{
-  width:34px;
-  height:34px;
+  border-radius:9px;
 
-  border:none;
-  border-radius:50%;
+  padding:10px 17px;
 
-  background:#eee;
+  background:var(--button-gradient);
+
+  color:white;
 
   cursor:pointer;
 }
 
-/* =========================
+.preview{
+  display:block;
+
+  max-width:180px;
+  max-height:180px;
+
+  margin-top:10px;
+
+  border-radius:10px;
+
+  object-fit:cover;
+}
+
+
+/* =========================================================
    상세 페이지
-========================= */
+   처음 만들었던 나무위키식 창
+========================================================= */
 
 .detailOverlay{
+  display:none;
+
   position:fixed;
+
   inset:0;
 
-  display:none;
+  z-index:8000;
+
   align-items:center;
+
   justify-content:center;
 
   padding:5vh 10vw;
 
-  background:rgba(0,0,0,.4);
-
-  z-index:7000;
+  background:
+    rgba(35,45,65,.34);
 }
 
 .detailOverlay.show{
@@ -537,163 +837,295 @@ body{
   position:relative;
 
   width:80vw;
+
   height:90vh;
 
-  overflow-y:auto;
+  overflow:auto;
 
-  padding:40px;
+  background:white;
 
-  background:#fff;
-
-  border-radius:17px;
+  border-radius:18px;
 
   box-shadow:
-    0 20px 55px rgba(40,60,80,.2);
+    0 20px 70px rgba(20,30,50,.22);
 }
 
-.detailClose{
-  position:absolute;
 
-  top:15px;
-  right:15px;
+/* 상세 상단 */
 
-  width:38px;
-  height:38px;
+.detailHeader{
+  padding:30px 38px 20px;
 
-  border:none;
-  border-radius:50%;
-
-  background:#eee;
-
-  cursor:pointer;
-
-  font-size:18px;
+  border-bottom:1px solid #e7ebf1;
 }
 
-.detailTitle{
-  margin:0 45px 25px 0;
+.detailHeader h2{
+  margin:0;
 
-  color:#111;
+  color:#111827;
 
-  font-size:32px;
+  font-size:30px;
+
+  letter-spacing:-.7px;
+}
+
+.detailHeader p{
+  margin:8px 0 0;
+
+  color:#788397;
+
+  font-size:14px;
+}
+
+
+/* 상세 이미지 */
+
+.detailImageWrap{
+  padding:25px 38px 0;
 }
 
 .detailImage{
+  display:block;
+
   width:100%;
-  max-height:420px;
+
+  max-height:470px;
 
   object-fit:contain;
 
-  display:block;
+  background:#f5f7fa;
 
-  margin:0 auto 25px;
-
-  border-radius:10px;
-
-  background:#f6f6f6;
+  border-radius:12px;
 }
+
+
+/* 상세 내용 */
+
+.detailContent{
+  padding:30px 38px 50px;
+}
+
+
+/* 나무위키식 표 */
 
 .infoTable{
   width:100%;
 
   border-collapse:collapse;
 
-  margin-top:20px;
+  margin-bottom:30px;
+
+  border-top:2px solid #dfe5ed;
 }
 
 .infoTable th,
 .infoTable td{
-  border:1px solid #ddd;
+  padding:12px 14px;
 
-  padding:12px;
+  border-bottom:1px solid #e4e8ee;
 
   text-align:left;
+
   vertical-align:top;
+
+  line-height:1.6;
 }
 
 .infoTable th{
-  width:130px;
+  width:145px;
 
-  background:#f1f1f1;
+  background:#f5f7fa;
+
+  color:#4b5565;
+
+  font-size:13px;
 
   font-weight:700;
 }
 
-.extraTitle{
-  margin-top:30px;
+.infoTable td{
+  color:#354052;
 
-  padding-bottom:8px;
+  font-size:14px;
 
-  border-bottom:2px solid #ddd;
-}
-
-.extraText{
   white-space:pre-wrap;
-
-  line-height:1.7;
 }
 
-/* =========================
-   폼
-========================= */
 
-.formGroup{
-  margin-bottom:13px;
+/* 추가 설명 */
+
+.wikiSection{
+  margin-top:30px;
 }
 
-.formGroup label{
-  display:block;
+.wikiSection h3{
+  margin:0;
 
-  margin-bottom:6px;
+  padding:11px 13px;
 
-  font-weight:700;
+  color:#344054;
+
+  background:#f4f6f9;
+
+  border-left:4px solid #9FB6FC;
+
+  font-size:17px;
+}
+
+.wikiBody{
+  padding:17px 14px;
+
+  color:#3f4a5b;
+
+  line-height:1.8;
+
+  white-space:pre-wrap;
 
   font-size:14px;
 }
 
-.formGroup input,
-.formGroup textarea,
-.formGroup select{
-  width:100%;
 
-  padding:10px;
+/* 상세 닫기 */
 
-  border:1px solid #ddd;
-  border-radius:8px;
+.detailClose{
+  position:fixed;
 
-  outline:none;
+  top:calc(5vh - 18px);
 
-  font-family:inherit;
+  right:calc(10vw - 18px);
+
+  width:40px;
+  height:40px;
+
+  border:0;
+
+  border-radius:50%;
+
+  background:var(--button-gradient);
+
+  color:white;
+
+  font-size:21px;
+
+  line-height:40px;
+
+  cursor:pointer;
+
+  z-index:9000;
+
+  box-shadow:
+    0 5px 18px rgba(50,70,100,.2);
 }
 
-.formGroup textarea{
-  min-height:100px;
-  resize:vertical;
+
+/* 상세 관리자 버튼 */
+
+.detailActions{
+  display:flex;
+
+  gap:8px;
+
+  margin-top:30px;
 }
 
-.fileInfo{
-  font-size:12px;
-  color:#777;
-  margin-top:5px;
+.detailActions button{
+  border:0;
+
+  border-radius:9px;
+
+  padding:9px 15px;
+
+  background:var(--button-gradient);
+
+  color:white;
+
+  cursor:pointer;
 }
 
-/* =========================
+
+/* =========================================================
+   빈 자료
+========================================================= */
+
+.emptyState{
+  grid-column:1/-1;
+
+  padding:70px 20px;
+
+  text-align:center;
+
+  color:#8792a5;
+
+  font-size:14px;
+}
+
+
+/* =========================================================
    모바일
-========================= */
+========================================================= */
 
-@media(max-width:900px){
+@media(max-width:700px){
 
-  .wrap{
-    width:90%;
+  .mainPage{
+    padding:35px 0 50px;
   }
 
-  .grid{
-    grid-template-columns:repeat(2,1fr);
+  .wrap{
+    width:92%;
+  }
+
+  .hero{
+    margin-bottom:25px;
   }
 
   .hero h1{
-    font-size:34px;
+    font-size:30px;
   }
+
+  .hero p{
+    font-size:13px;
+
+    line-height:1.6;
+  }
+
+  .contentBox{
+    padding:15px;
+
+    border-radius:14px;
+  }
+
+  .grid{
+    grid-template-columns:
+      repeat(2,1fr);
+
+    gap:12px;
+  }
+
+  .cardbody{
+    padding:11px;
+  }
+
+  .cardbody h3{
+    font-size:14px;
+  }
+
+  .cardbody p{
+    font-size:12px;
+  }
+
+  .createPanel{
+    flex-direction:column;
+  }
+
+  .createPanel button{
+    width:100%;
+  }
+
+  .adminPanel{
+    width:82vw;
+  }
+
+  /* 상세창 */
 
   .detailOverlay{
     padding:0;
@@ -701,99 +1133,106 @@ body{
 
   .detailPage{
     width:100vw;
+
     height:100vh;
 
     border-radius:0;
-
-    padding:30px 20px;
   }
 
-}
+  .detailClose{
+    top:13px;
 
-@media(max-width:600px){
-
-  .mainPage{
-    padding:35px 0;
+    right:13px;
   }
 
-  .wrap{
-    width:92%;
+  .detailHeader{
+    padding:25px 20px 17px;
+
+    padding-right:65px;
   }
 
-  .hero h1{
-    font-size:29px;
+  .detailHeader h2{
+    font-size:24px;
   }
 
-  .hero p{
-    font-size:14px;
-    line-height:1.5;
+  .detailImageWrap{
+    padding:18px 20px 0;
   }
 
-  .contentBox{
-    padding:16px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .toolbar{
-    align-items:stretch;
-  }
-
-  .toolbar button{
-    width:100%;
-  }
-
-  .detailTitle{
-    font-size:25px;
+  .detailContent{
+    padding:22px 20px 40px;
   }
 
   .infoTable th{
-    width:90px;
+    width:95px;
   }
 
   .infoTable th,
   .infoTable td{
-    padding:9px;
-    font-size:14px;
+    padding:10px;
+
+    font-size:13px;
   }
 
+  .modalBg{
+    padding:15px;
+  }
+
+  .modal{
+    width:100%;
+
+    max-height:92vh;
+
+    padding:22px;
+
+    border-radius:16px;
+  }
 }
+
 </style>
 </head>
 
+
 <body>
 
-<!-- =========================
-     입장
-========================= -->
+
+<!-- =========================================================
+     비밀번호 화면
+========================================================= -->
 
 <div id="lockScreen">
 
   <div class="lockBox">
 
-    <h2>이펙필드 아카데미</h2>
+    <h1>이펙필드 아카데미</h1>
 
-    <p>입장하려면 비밀번호를 입력하세요.</p>
+    <p>
+      아카데미 자료를 확인하려면<br>
+      비밀번호를 입력해주세요.
+    </p>
 
     <input
-      id="passwordInput"
+      id="sitePassword"
       class="lockInput"
       type="password"
       placeholder="비밀번호"
       autocomplete="off"
+      onkeydown="
+        if(event.key === 'Enter'){
+          unlock();
+        }
+      "
     >
 
     <button
-      class="gradientBtn lockButton"
+      class="lockButton"
       onclick="unlock()"
     >
-      입장
+      입장하기
     </button>
 
     <div
-      id="passwordError"
+      id="lockError"
       class="errorText"
     ></div>
 
@@ -802,197 +1241,124 @@ body{
 </div>
 
 
-<!-- =========================
-     메인
-========================= -->
+<!-- =========================================================
+     관리자 버튼
+========================================================= -->
 
-<div id="mainPage" class="mainPage">
+<button
+  class="adminToggle"
+  onclick="toggleAdminPanel()"
+>
+  &gt;
+</button>
 
-  <button
-    class="adminToggle"
-    onclick="toggleAdminPanel()"
-  >&gt;</button>
 
+<div
+  id="adminPanel"
+  class="adminPanel"
+>
 
-  <!-- 관리자 패널 -->
+  <h2>관리자</h2>
 
-  <aside
-    id="adminPanel"
-    class="adminPanel"
+  <p>
+    관리자 비밀번호를 입력하면<br>
+    자료를 추가하거나 수정할 수 있습니다.
+  </p>
+
+  <input
+    id="adminPassword"
+    type="password"
+    placeholder="관리자 비밀번호"
   >
 
-    <h2>관리자</h2>
+  <button onclick="unlockAdmin()">
+    관리자 모드 켜기
+  </button>
+
+  <button onclick="disableAdmin()">
+    관리자 모드 끄기
+  </button>
+
+  <div
+    id="adminStatus"
+    class="adminStatus"
+  >
+    일반 모드
+  </div>
+
+</div>
 
 
-    <!-- 관리자 로그인 -->
+<!-- =========================================================
+     메인
+========================================================= -->
 
-    <div
-      id="adminLoginSection"
-      class="adminSection"
-    >
-
-      <h3>관리자 모드</h3>
-
-      <input
-        id="adminPasswordInput"
-        class="adminInput"
-        type="password"
-        placeholder="관리자 비밀번호"
-        autocomplete="off"
-      >
-
-      <button
-        class="gradientBtn"
-        onclick="enableAdmin()"
-      >
-        관리자 모드 시작
-      </button>
-
-      <p
-        id="adminError"
-        class="errorText"
-      ></p>
-
-    </div>
-
-
-    <!-- 관리자 기능 -->
-
-    <div
-      id="adminTools"
-      style="display:none;"
-    >
-
-      <!-- 제목/소제목 수정 -->
-
-      <div class="adminSection">
-
-        <h3>사이트 제목 수정</h3>
-
-        <input
-          id="siteTitleInput"
-          class="adminInput"
-          type="text"
-          placeholder="사이트 제목"
-        >
-
-        <input
-          id="siteSubtitleInput"
-          class="adminInput"
-          type="text"
-          placeholder="사이트 소제목"
-        >
-
-        <button
-          class="gradientBtn"
-          onclick="saveSiteInfo()"
-          style="width:100%;"
-        >
-          제목 / 소제목 저장
-        </button>
-
-      </div>
-
-
-      <!-- 폴더 관리 -->
-
-      <div class="adminSection">
-
-        <h3>폴더 관리</h3>
-
-        <input
-          id="folderNameInput"
-          class="adminInput"
-          type="text"
-          placeholder="새 폴더 이름"
-        >
-
-        <button
-          class="gradientBtn"
-          onclick="createFolder()"
-          style="width:100%;"
-        >
-          폴더 만들기
-        </button>
-
-      </div>
-
-
-      <!-- 자료 관리 -->
-
-      <div class="adminSection">
-
-        <h3>자료 관리</h3>
-
-        <button
-          class="gradientBtn"
-          onclick="openItemModal()"
-          style="width:100%;"
-        >
-          자료 추가
-        </button>
-
-      </div>
-
-
-      <div class="adminSection">
-
-        <button
-          class="gradientBtn"
-          onclick="disableAdmin()"
-          style="width:100%;"
-        >
-          관리자 모드 종료
-        </button>
-
-      </div>
-
-    </div>
-
-  </aside>
-
-
-  <!-- 메인 내용 -->
+<div class="mainPage">
 
   <main class="wrap">
 
     <header class="hero">
 
-      <h1 id="siteTitle">
+      <h1>
         이펙필드 아카데미
       </h1>
 
-      <p id="siteSubtitle">
+      <p>
         초능력을 올바른 곳에 사용하는 것을 목적으로 하는 다양한 분야의 아카데미
       </p>
 
     </header>
 
 
+    <!-- 관리자 생성 버튼 -->
+
+    <section
+      id="createPanel"
+      class="createPanel"
+    >
+
+      <button
+        class="gradientBtn"
+        onclick="openFolderModal()"
+      >
+        + 폴더 만들기
+      </button>
+
+      <button
+        class="gradientBtn"
+        onclick="openItemModal()"
+      >
+        + 정보 만들기
+      </button>
+
+    </section>
+
+
+    <!-- 자료 창 -->
+
     <section class="contentBox">
 
       <div class="toolbar">
 
-        <div
-          id="breadcrumb"
-          class="path"
-        ></div>
-
         <button
-          id="backButton"
-          class="gradientBtn"
-          onclick="goBack()"
-          style="display:none;"
+          class="homeButton"
+          onclick="goHome()"
         >
-          ← 이전
+          🏠 전체 자료
         </button>
+
+        <span
+          id="currentPath"
+          class="currentPath"
+        ></span>
 
       </div>
 
-      <div
+
+      <section
         id="grid"
         class="grid"
-      ></div>
+      ></section>
 
     </section>
 
@@ -1001,133 +1367,57 @@ body{
 </div>
 
 
-<!-- =========================
-     자료 추가/수정
-========================= -->
+<!-- =========================================================
+     생성 / 수정 모달
+========================================================= -->
 
 <div
-  id="itemModalBg"
+  id="modalBg"
   class="modalBg"
+  onclick="
+    if(event.target === this){
+      closeModal();
+    }
+  "
 >
 
   <div class="modal">
 
-    <div class="modalHeader">
+    <h2 id="modalTitle"></h2>
 
-      <h2 id="itemModalTitle">
-        자료 추가
-      </h2>
-
-      <button
-        class="closeBtn"
-        onclick="closeItemModal()"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <div class="formGroup">
-      <label>이름</label>
-      <input id="itemName">
-    </div>
-
-    <div class="formGroup">
-      <label>학년</label>
-      <input id="itemGrade">
-    </div>
-
-    <div class="formGroup">
-      <label>간단 정보</label>
-      <textarea id="itemInfo"></textarea>
-    </div>
-
-    <div class="formGroup">
-      <label>분야</label>
-      <input id="itemField">
-    </div>
-
-    <div class="formGroup">
-      <label>초능력</label>
-      <textarea id="itemAbility"></textarea>
-    </div>
-
-    <div class="formGroup">
-      <label>좋아하는 것</label>
-      <textarea id="itemLikes"></textarea>
-    </div>
-
-    <div class="formGroup">
-      <label>싫어하는 것</label>
-      <textarea id="itemDislikes"></textarea>
-    </div>
-
-    <div class="formGroup">
-      <label>가족관계</label>
-      <textarea id="itemFamily"></textarea>
-    </div>
-
-    <div class="formGroup">
-      <label>이외의 관계</label>
-      <textarea id="itemRelations"></textarea>
-    </div>
-
-    <div class="formGroup">
-      <label>추가 설명</label>
-      <textarea id="itemExtra"></textarea>
-    </div>
-
-    <div class="formGroup">
-
-      <label>대표 이미지</label>
-
-      <input
-        id="itemImage"
-        type="file"
-        accept="image/*"
-      >
-
-      <div class="fileInfo">
-        새 이미지를 선택하면 기존 이미지가 교체됩니다.
-      </div>
-
-    </div>
-
-    <button
-      class="gradientBtn"
-      onclick="saveItem()"
-      style="width:100%;"
-    >
-      저장
-    </button>
+    <div id="modalContent"></div>
 
   </div>
 
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
      상세 페이지
-========================= -->
+========================================================= -->
 
 <div
   id="detailOverlay"
   class="detailOverlay"
+  onclick="
+    if(event.target === this){
+      closeDetail();
+    }
+  "
 >
 
-  <div class="detailPage">
+  <div
+    id="detailPage"
+    class="detailPage"
+  ></div>
 
-    <button
-      class="detailClose"
-      onclick="closeDetail()"
-    >
-      ×
-    </button>
 
-    <div id="detailContent"></div>
-
-  </div>
+  <button
+    class="detailClose"
+    onclick="closeDetail()"
+  >
+    ×
+  </button>
 
 </div>
 
@@ -1135,20 +1425,52 @@ body{
 <script>
 
 /* =========================================================
-   비밀번호
+   기본 설정
 ========================================================= */
+
+
+/*
+  사이트 입장 비밀번호
+
+  모든 사람이 사용하는 공용 비밀번호
+*/
 
 const SITE_PASSWORD = "1234";
 
-const ADMIN_PASSWORD = "Leeafnatureminna0103399";
+
+/*
+  관리자 비밀번호
+*/
+
+const ADMIN_PASSWORD =
+  "Leeafnatureminna0103399";
 
 
-/* =========================================================
-   Supabase
-========================================================= */
+/*
+  Supabase 설정
 
-const SUPABASE_URL = "여기에_Project_URL";
-const SUPABASE_KEY = "여기에_Publishable_Key";
+  아래 두 곳에 본인의 Supabase 정보를 넣으면
+  기기 간 데이터 공유가 가능합니다.
+*/
+
+const SUPABASE_URL =
+  "여기에_Project_URL";
+
+const SUPABASE_KEY =
+  "여기에_Publishable_Key";
+
+
+/*
+  중요한 부분
+
+  Supabase는 처음부터 실행하지 않습니다.
+
+  먼저 1234 비밀번호를 확인하고,
+  입장한 뒤에 Supabase를 연결합니다.
+
+  따라서 Supabase 설정이 잘못되어 있어도
+  비밀번호 화면은 정상적으로 작동합니다.
+*/
 
 let supabaseClient = null;
 
@@ -1158,13 +1480,6 @@ let supabaseClient = null;
 ========================================================= */
 
 let data = {
-
-  site:{
-    title:"이펙필드 아카데미",
-
-    subtitle:
-      "초능력을 올바른 곳에 사용하는 것을 목적으로 하는 다양한 분야의 아카데미"
-  },
 
   folders:[
     {
@@ -1187,7 +1502,7 @@ let editingId = null;
 
 
 /* =========================================================
-   Supabase 초기화
+   Supabase 연결
 ========================================================= */
 
 function initSupabase(){
@@ -1206,6 +1521,7 @@ function initSupabase(){
     return false;
   }
 
+
   if(
     !window.supabase ||
     !window.supabase.createClient
@@ -1217,6 +1533,7 @@ function initSupabase(){
 
     return false;
   }
+
 
   try{
 
@@ -1233,35 +1550,55 @@ function initSupabase(){
     console.error(error);
 
     return false;
-
   }
 
 }
 
 
 /* =========================================================
-   입장
+   처음 비밀번호
 ========================================================= */
 
 function unlock(){
 
   const input =
-    document.getElementById("passwordInput");
+    document.getElementById(
+      "sitePassword"
+    );
 
   const error =
-    document.getElementById("passwordError");
+    document.getElementById(
+      "lockError"
+    );
 
 
-  if(input.value === SITE_PASSWORD){
+  /*
+    비밀번호가 맞을 경우
+  */
 
-    document.getElementById("lockScreen")
-      .style.display = "none";
-
-    document.getElementById("mainPage")
-      .style.display = "block";
+  if(
+    input.value === SITE_PASSWORD
+  ){
 
     error.textContent = "";
 
+    document
+      .getElementById("lockScreen")
+      .style.display = "none";
+
+
+    /*
+      비밀번호를 localStorage나
+      sessionStorage에 저장하지 않습니다.
+
+      따라서 다른 기기에서도
+      다시 1234를 입력하면 됩니다.
+    */
+
+
+    /*
+      Supabase 연결
+    */
 
     if(initSupabase()){
 
@@ -1273,29 +1610,160 @@ function unlock(){
 
     }
 
+    return;
+  }
+
+
+  /*
+    비밀번호가 틀렸을 경우
+  */
+
+  error.textContent =
+    "비밀번호가 맞지 않습니다";
+
+
+  input.value = "";
+
+  input.focus();
+
+}
+
+
+/* =========================================================
+   처음 시작
+========================================================= */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    /*
+      로그인 기록을 확인하지 않습니다.
+
+      매번 사이트에 처음 들어오면
+      1234를 입력하도록 합니다.
+    */
+
+    document
+      .getElementById("sitePassword")
+      .focus();
+
+  }
+);
+
+
+/* =========================================================
+   관리자
+========================================================= */
+
+function toggleAdminPanel(){
+
+  document
+    .getElementById("adminPanel")
+    .classList.toggle("open");
+
+}
+
+
+function unlockAdmin(){
+
+  const password =
+    document
+      .getElementById("adminPassword")
+      .value;
+
+
+  if(
+    password === ADMIN_PASSWORD
+  ){
+
+    adminMode = true;
+
+
+    document
+      .getElementById("createPanel")
+      .classList.add("active");
+
+
+    document
+      .getElementById("adminStatus")
+      .textContent =
+      "관리자 모드 활성화";
+
+
+    render();
+
   }else{
 
-    error.textContent =
-      "비밀번호가 맞지 않습니다";
-
-    input.value = "";
-
-    input.focus();
+    alert(
+      "관리자 비밀번호가 맞지 않습니다."
+    );
 
   }
 
 }
 
 
-document
-  .getElementById("passwordInput")
-  .addEventListener("keydown",function(e){
+function disableAdmin(){
 
-    if(e.key === "Enter"){
-      unlock();
-    }
+  adminMode = false;
 
-  });
+
+  document
+    .getElementById("createPanel")
+    .classList.remove("active");
+
+
+  document
+    .getElementById("adminStatus")
+    .textContent =
+    "일반 모드";
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   ID
+========================================================= */
+
+function uid(){
+
+  return Date.now().toString(36)
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+}
+
+
+/* =========================================================
+   HTML escape
+========================================================= */
+
+function escapeHTML(value){
+
+  if(
+    value === undefined ||
+    value === null
+  ){
+
+    return "";
+
+  }
+
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
 
 
 /* =========================================================
@@ -1314,17 +1782,17 @@ async function loadData(){
 
   try{
 
-    const {data:row,error} =
+    const result =
       await supabaseClient
         .from("academy_data")
         .select("data")
         .eq("id",1)
-        .maybeSingle();
+        .single();
 
 
-    if(error){
+    if(result.error){
 
-      console.error(error);
+      console.error(result.error);
 
       render();
 
@@ -1332,23 +1800,13 @@ async function loadData(){
     }
 
 
-    if(row && row.data){
+    if(
+      result.data &&
+      result.data.data
+    ){
 
-      data = row.data;
-
-    }
-
-
-    if(!data.site){
-
-      data.site = {
-
-        title:"이펙필드 아카데미",
-
-        subtitle:
-          "초능력을 올바른 곳에 사용하는 것을 목적으로 하는 다양한 분야의 아카데미"
-
-      };
+      data =
+        result.data.data;
 
     }
 
@@ -1374,8 +1832,9 @@ async function saveData(){
 
   if(!supabaseClient){
 
-    console.warn(
-      "Supabase가 설정되지 않았습니다."
+    alert(
+      "Supabase 설정이 필요합니다.\n\n" +
+      "SUPABASE_URL과 SUPABASE_KEY를 입력해주세요."
     );
 
     return false;
@@ -1384,28 +1843,24 @@ async function saveData(){
 
   try{
 
-    const {error} =
+    const result =
       await supabaseClient
         .from("academy_data")
-        .upsert(
-          {
-            id:1,
-            data:data
-          },
-          {
-            onConflict:"id"
-          }
-        );
+        .update({
+          data:data
+        })
+        .eq("id",1);
 
 
-    if(error){
+    if(result.error){
 
-      console.error(error);
+      console.error(result.error);
 
-      alert("저장 중 오류가 발생했습니다.");
+      alert(
+        "데이터 저장 중 문제가 발생했습니다."
+      );
 
       return false;
-
     }
 
 
@@ -1416,426 +1871,66 @@ async function saveData(){
     console.error(error);
 
     return false;
-
   }
 
 }
 
 
 /* =========================================================
-   HTML 처리
+   폴더 관련
 ========================================================= */
 
-function escapeHTML(value){
-
-  if(value === null || value === undefined){
-    return "";
-  }
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================================
-   관리자 패널
-========================================================= */
-
-function toggleAdminPanel(){
-
-  document
-    .getElementById("adminPanel")
-    .classList.toggle("open");
-
-}
-
-
-/* =========================================================
-   관리자 로그인
-========================================================= */
-
-function enableAdmin(){
-
-  const input =
-    document.getElementById("adminPasswordInput");
-
-  const error =
-    document.getElementById("adminError");
-
-
-  if(input.value === ADMIN_PASSWORD){
-
-    adminMode = true;
-
-    error.textContent = "";
-
-    document
-      .getElementById("adminLoginSection")
-      .style.display = "none";
-
-    document
-      .getElementById("adminTools")
-      .style.display = "block";
-
-
-    document
-      .getElementById("siteTitleInput")
-      .value =
-        data.site.title;
-
-
-    document
-      .getElementById("siteSubtitleInput")
-      .value =
-        data.site.subtitle;
-
-
-    render();
-
-  }else{
-
-    error.textContent =
-      "관리자 비밀번호가 맞지 않습니다";
-
-    input.value = "";
-
-    input.focus();
-
-  }
-
-}
-
-
-document
-  .getElementById("adminPasswordInput")
-  .addEventListener("keydown",function(e){
-
-    if(e.key === "Enter"){
-      enableAdmin();
-    }
-
-  });
-
-
-/* =========================================================
-   관리자 종료
-========================================================= */
-
-function disableAdmin(){
-
-  adminMode = false;
-
-  document
-    .getElementById("adminLoginSection")
-    .style.display = "block";
-
-  document
-    .getElementById("adminTools")
-    .style.display = "none";
-
-  document
-    .getElementById("adminPasswordInput")
-    .value = "";
-
-  render();
-
-}
-
-
-/* =========================================================
-   ★ 제목 / 소제목 수정
-========================================================= */
-
-async function saveSiteInfo(){
-
-  if(!adminMode){
-    return;
-  }
-
-
-  const title =
-    document
-      .getElementById("siteTitleInput")
-      .value
-      .trim();
-
-
-  const subtitle =
-    document
-      .getElementById("siteSubtitleInput")
-      .value
-      .trim();
-
-
-  if(!title){
-
-    alert("사이트 제목을 입력해주세요.");
-
-    return;
-  }
-
-
-  if(!subtitle){
-
-    alert("사이트 소제목을 입력해주세요.");
-
-    return;
-  }
-
-
-  data.site.title = title;
-
-  data.site.subtitle = subtitle;
-
-
-  applySiteInfo();
-
-
-  const saved =
-    await saveData();
-
-
-  if(saved){
-
-    alert(
-      "제목과 소제목이 저장되었습니다."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   제목 화면 적용
-========================================================= */
-
-function applySiteInfo(){
-
-  document
-    .getElementById("siteTitle")
-    .textContent =
-      data.site.title;
-
-
-  document
-    .getElementById("siteSubtitle")
-    .textContent =
-      data.site.subtitle;
-
-
-  document.title =
-    data.site.title;
-
-}
-
-
-/* =========================================================
-   폴더
-========================================================= */
-
-function getFolder(id){
+function getCurrentFolder(){
 
   return data.folders.find(
-    folder => folder.id === id
+    folder =>
+      folder.id === currentFolder
   );
 
 }
 
 
-function getBreadcrumb(folderId){
+function getFolderPath(){
 
-  const result = [];
+  const path = [];
 
-  let current =
-    getFolder(folderId);
+  let folder =
+    getCurrentFolder();
 
 
-  while(current){
+  while(folder){
 
-    result.unshift(current);
+    path.unshift(folder);
 
-    if(!current.parent){
-      break;
-    }
-
-    current =
-      getFolder(current.parent);
+    folder =
+      data.folders.find(
+        f =>
+          f.id === folder.parent
+      );
 
   }
 
 
-  return result;
+  return path;
 
 }
 
 
-function createFolder(){
+function getChildFolders(parent){
 
-  if(!adminMode){
-    return;
-  }
-
-
-  const input =
-    document.getElementById("folderNameInput");
-
-
-  const name =
-    input.value.trim();
-
-
-  if(!name){
-
-    alert("폴더 이름을 입력해주세요.");
-
-    return;
-  }
-
-
-  data.folders.push({
-
-    id:
-      "folder_" +
-      Date.now(),
-
-    name:name,
-
-    parent:currentFolder
-
-  });
-
-
-  input.value = "";
-
-  render();
-
-  saveData();
+  return data.folders.filter(
+    folder =>
+      folder.parent === parent
+  );
 
 }
 
 
-async function renameFolder(id){
+function goHome(){
 
-  if(!adminMode){
-    return;
-  }
-
-
-  if(id === "root"){
-
-    alert(
-      "전체 자료 폴더는 수정할 수 없습니다."
-    );
-
-    return;
-  }
-
-
-  const folder =
-    getFolder(id);
-
-
-  const newName =
-    prompt(
-      "새 폴더 이름",
-      folder.name
-    );
-
-
-  if(
-    newName === null ||
-    !newName.trim()
-  ){
-    return;
-  }
-
-
-  folder.name =
-    newName.trim();
-
+  currentFolder = "root";
 
   render();
-
-  await saveData();
-
-}
-
-
-async function deleteFolder(id){
-
-  if(!adminMode){
-    return;
-  }
-
-
-  if(id === "root"){
-
-    alert(
-      "전체 자료 폴더는 삭제할 수 없습니다."
-    );
-
-    return;
-  }
-
-
-  const folder =
-    getFolder(id);
-
-
-  const hasChild =
-    data.folders.some(
-      f => f.parent === id
-    );
-
-
-  const hasItems =
-    data.items.some(
-      item => item.folder === id
-    );
-
-
-  if(hasChild || hasItems){
-
-    alert(
-      "폴더 안에 자료가 있거나 하위 폴더가 있어서 삭제할 수 없습니다."
-    );
-
-    return;
-  }
-
-
-  if(
-    !confirm(
-      `"${folder.name}" 폴더를 삭제할까요?`
-    )
-  ){
-    return;
-  }
-
-
-  data.folders =
-    data.folders.filter(
-      f => f.id !== id
-    );
-
-
-  if(currentFolder === id){
-
-    currentFolder =
-      folder.parent || "root";
-
-  }
-
-
-  render();
-
-  await saveData();
 
 }
 
@@ -1849,673 +1944,28 @@ function openFolder(id){
 }
 
 
-function goBack(){
-
-  const folder =
-    getFolder(currentFolder);
-
-
-  if(folder && folder.parent){
-
-    currentFolder =
-      folder.parent;
-
-  }else{
-
-    currentFolder = "root";
-
-  }
-
-
-  render();
-
-}
-
-
 /* =========================================================
-   자료 모달
-========================================================= */
-
-function openItemModal(id=null){
-
-  if(!adminMode){
-    return;
-  }
-
-
-  editingId = id;
-
-
-  document
-    .getElementById("itemModalBg")
-    .classList.add("show");
-
-
-  document
-    .getElementById("itemModalTitle")
-    .textContent =
-      id ? "자료 수정" : "자료 추가";
-
-
-  clearItemForm();
-
-
-  if(id){
-
-    const item =
-      data.items.find(
-        x => x.id === id
-      );
-
-
-    if(item){
-
-      document.getElementById("itemName").value =
-        item.name || "";
-
-      document.getElementById("itemGrade").value =
-        item.grade || "";
-
-      document.getElementById("itemInfo").value =
-        item.info || "";
-
-      document.getElementById("itemField").value =
-        item.field || "";
-
-      document.getElementById("itemAbility").value =
-        item.ability || "";
-
-      document.getElementById("itemLikes").value =
-        item.likes || "";
-
-      document.getElementById("itemDislikes").value =
-        item.dislikes || "";
-
-      document.getElementById("itemFamily").value =
-        item.family || "";
-
-      document.getElementById("itemRelations").value =
-        item.relations || "";
-
-      document.getElementById("itemExtra").value =
-        item.extra || "";
-
-    }
-
-  }
-
-}
-
-
-function clearItemForm(){
-
-  [
-    "itemName",
-    "itemGrade",
-    "itemInfo",
-    "itemField",
-    "itemAbility",
-    "itemLikes",
-    "itemDislikes",
-    "itemFamily",
-    "itemRelations",
-    "itemExtra",
-    "itemImage"
-  ].forEach(id => {
-
-    const el =
-      document.getElementById(id);
-
-    if(el){
-      el.value = "";
-    }
-
-  });
-
-}
-
-
-function closeItemModal(){
-
-  document
-    .getElementById("itemModalBg")
-    .classList.remove("show");
-
-  editingId = null;
-
-}
-
-
-/* =========================================================
-   이미지 업로드
-========================================================= */
-
-async function uploadImage(file){
-
-  if(!supabaseClient){
-
-    alert(
-      "Supabase가 설정되지 않아 이미지를 업로드할 수 없습니다."
-    );
-
-    return null;
-  }
-
-
-  const extension =
-    file.name
-      .split(".")
-      .pop()
-      .toLowerCase();
-
-
-  const fileName =
-    Date.now() +
-    "_" +
-    Math.random()
-      .toString(36)
-      .substring(2) +
-    "." +
-    extension;
-
-
-  try{
-
-    const {error} =
-      await supabaseClient
-        .storage
-        .from("academy-images")
-        .upload(
-          fileName,
-          file
-        );
-
-
-    if(error){
-
-      console.error(error);
-
-      alert(
-        "이미지 업로드에 실패했습니다."
-      );
-
-      return null;
-    }
-
-
-    const {data:publicData} =
-      supabaseClient
-        .storage
-        .from("academy-images")
-        .getPublicUrl(fileName);
-
-
-    return publicData.publicUrl;
-
-  }catch(error){
-
-    console.error(error);
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================================
-   자료 저장
-========================================================= */
-
-async function saveItem(){
-
-  if(!adminMode){
-    return;
-  }
-
-
-  const name =
-    document
-      .getElementById("itemName")
-      .value
-      .trim();
-
-
-  if(!name){
-
-    alert("이름을 입력해주세요.");
-
-    return;
-  }
-
-
-  let item;
-
-
-  if(editingId){
-
-    item =
-      data.items.find(
-        x => x.id === editingId
-      );
-
-  }else{
-
-    item = {
-
-      id:
-        "item_" +
-        Date.now(),
-
-      folder:currentFolder,
-
-      name:""
-
-    };
-
-    data.items.push(item);
-
-  }
-
-
-  item.name = name;
-
-  item.grade =
-    document.getElementById("itemGrade").value.trim();
-
-  item.info =
-    document.getElementById("itemInfo").value.trim();
-
-  item.field =
-    document.getElementById("itemField").value.trim();
-
-  item.ability =
-    document.getElementById("itemAbility").value.trim();
-
-  item.likes =
-    document.getElementById("itemLikes").value.trim();
-
-  item.dislikes =
-    document.getElementById("itemDislikes").value.trim();
-
-  item.family =
-    document.getElementById("itemFamily").value.trim();
-
-  item.relations =
-    document.getElementById("itemRelations").value.trim();
-
-  item.extra =
-    document.getElementById("itemExtra").value.trim();
-
-
-  const file =
-    document
-      .getElementById("itemImage")
-      .files[0];
-
-
-  if(file){
-
-    const imageUrl =
-      await uploadImage(file);
-
-
-    if(imageUrl){
-      item.image = imageUrl;
-    }
-
-  }
-
-
-  closeItemModal();
-
-  render();
-
-  await saveData();
-
-}
-
-
-/* =========================================================
-   자료 삭제
-========================================================= */
-
-async function deleteItem(id){
-
-  if(!adminMode){
-    return;
-  }
-
-
-  const item =
-    data.items.find(
-      x => x.id === id
-    );
-
-
-  if(!item){
-    return;
-  }
-
-
-  if(
-    !confirm(
-      `"${item.name}" 자료를 삭제할까요?`
-    )
-  ){
-    return;
-  }
-
-
-  data.items =
-    data.items.filter(
-      x => x.id !== id
-    );
-
-
-  render();
-
-  await saveData();
-
-}
-
-
-/* =========================================================
-   상세 페이지
-========================================================= */
-
-function openDetail(id){
-
-  const item =
-    data.items.find(
-      x => x.id === id
-    );
-
-
-  if(!item){
-    return;
-  }
-
-
-  let html = `
-
-    <h1 class="detailTitle">
-      ${escapeHTML(item.name)}
-    </h1>
-
-  `;
-
-
-  if(item.image){
-
-    html += `
-
-      <img
-        class="detailImage"
-        src="${escapeHTML(item.image)}"
-        alt="${escapeHTML(item.name)}"
-      >
-
-    `;
-
-  }
-
-
-  const rows = [
-
-    ["학년",item.grade],
-
-    ["간단 정보",item.info],
-
-    ["분야",item.field],
-
-    ["초능력",item.ability],
-
-    ["좋아하는 것",item.likes],
-
-    ["싫어하는 것",item.dislikes],
-
-    ["가족관계",item.family],
-
-    ["이외의 관계",item.relations]
-
-  ];
-
-
-  const validRows =
-    rows.filter(
-      row =>
-        row[1] !== undefined &&
-        row[1] !== null &&
-        String(row[1]).trim() !== ""
-    );
-
-
-  if(validRows.length){
-
-    html += `
-      <table class="infoTable">
-        <tbody>
-    `;
-
-
-    validRows.forEach(row => {
-
-      html += `
-
-        <tr>
-
-          <th>
-            ${escapeHTML(row[0])}
-          </th>
-
-          <td>
-            ${escapeHTML(row[1])}
-          </td>
-
-        </tr>
-
-      `;
-
-    });
-
-
-    html += `
-        </tbody>
-      </table>
-    `;
-
-  }
-
-
-  if(
-    item.extra &&
-    item.extra.trim()
-  ){
-
-    html += `
-
-      <h2 class="extraTitle">
-        추가 설명
-      </h2>
-
-      <div class="extraText">
-        ${escapeHTML(item.extra)}
-      </div>
-
-    `;
-
-  }
-
-
-  document
-    .getElementById("detailContent")
-    .innerHTML = html;
-
-
-  document
-    .getElementById("detailOverlay")
-    .classList.add("show");
-
-}
-
-
-function closeDetail(){
-
-  document
-    .getElementById("detailOverlay")
-    .classList.remove("show");
-
-}
-
-
-/* =========================================================
-   렌더링
+   화면 출력
 ========================================================= */
 
 function render(){
 
-  applySiteInfo();
-
-
   const grid =
-    document.getElementById("grid");
-
-
-  grid.innerHTML = "";
-
-
-  const breadcrumb =
-    getBreadcrumb(currentFolder);
-
-
-  document
-    .getElementById("breadcrumb")
-    .innerHTML =
-      breadcrumb
-        .map(
-          (folder,index) => {
-
-            const last =
-              index === breadcrumb.length - 1;
-
-
-            if(last){
-
-              return `
-                <strong>
-                  ${escapeHTML(folder.name)}
-                </strong>
-              `;
-
-            }
-
-
-            return `
-
-              <span
-                style="cursor:pointer;"
-                onclick="openFolder('${folder.id}')"
-              >
-                ${escapeHTML(folder.name)}
-              </span>
-
-              <span> / </span>
-
-            `;
-
-          }
-        )
-        .join("");
-
-
-  const current =
-    getFolder(currentFolder);
-
-
-  document
-    .getElementById("backButton")
-    .style.display =
-      current &&
-      current.parent
-        ? "block"
-        : "none";
-
-
-  const folders =
-    data.folders.filter(
-      folder =>
-        folder.parent === currentFolder
+    document.getElementById(
+      "grid"
     );
 
 
-  folders.forEach(folder => {
-
-    const card =
-      document.createElement("div");
-
-
-    card.className = "card";
+  const path =
+    document.getElementById(
+      "currentPath"
+    );
 
 
-    let actions = "";
-
-
-    if(adminMode){
-
-      actions = `
-
-        <div class="cardActions">
-
-          <button
-            class="smallBtn"
-            onclick="
-              event.stopPropagation();
-              renameFolder('${folder.id}')
-            "
-          >
-            수정
-          </button>
-
-          <button
-            class="smallBtn"
-            onclick="
-              event.stopPropagation();
-              deleteFolder('${folder.id}')
-            "
-          >
-            삭제
-          </button>
-
-        </div>
-
-      `;
-
-    }
-
-
-    card.innerHTML = `
-
-      ${actions}
-
-      <div class="folderIcon">
-        📁
-      </div>
-
-      <h3>
-        ${escapeHTML(folder.name)}
-      </h3>
-
-    `;
-
-
-    card.onclick =
-      () => openFolder(folder.id);
-
-
-    grid.appendChild(card);
-
-  });
+  const folders =
+    getChildFolders(
+      currentFolder
+    );
 
 
   const items =
@@ -2525,94 +1975,180 @@ function render(){
     );
 
 
-  items.forEach(item => {
+  const folderPath =
+    getFolderPath();
+
+
+  path.textContent =
+    folderPath
+      .map(folder => folder.name)
+      .join(" / ");
+
+
+  grid.innerHTML = "";
+
+
+  /* 폴더 */
+
+  folders.forEach(folder => {
 
     const card =
-      document.createElement("div");
-
+      document.createElement(
+        "article"
+      );
 
     card.className = "card";
 
 
-    let actions = "";
+    card.innerHTML = `
 
+      <div
+        class="thumb"
+        onclick="openFolder('${folder.id}')"
+      >
 
-    if(adminMode){
-
-      actions = `
-
-        <div class="cardActions">
-
-          <button
-            class="smallBtn"
-            onclick="
-              event.stopPropagation();
-              openItemModal('${item.id}')
-            "
-          >
-            수정
-          </button>
-
-          <button
-            class="smallBtn"
-            onclick="
-              event.stopPropagation();
-              deleteItem('${item.id}')
-            "
-          >
-            삭제
-          </button>
-
+        <div class="folderThumb">
+          📁
         </div>
 
-      `;
-
-    }
+      </div>
 
 
-    let imageHTML;
+      <div class="cardbody">
+
+        <h3>
+          ${escapeHTML(folder.name)}
+        </h3>
 
 
-    if(item.image){
+        ${
+          adminMode
+          ?
+          `
+            <div class="cardactions">
 
-      imageHTML = `
+              <button
+                onclick="editFolder('${folder.id}')"
+              >
+                수정
+              </button>
 
+              <button
+                onclick="deleteFolder('${folder.id}')"
+              >
+                삭제
+              </button>
+
+            </div>
+          `
+          :
+          ""
+        }
+
+      </div>
+    `;
+
+
+    grid.appendChild(card);
+
+  });
+
+
+  /* 정보 */
+
+  items.forEach(item => {
+
+    const card =
+      document.createElement(
+        "article"
+      );
+
+    card.className = "card";
+
+
+    const image =
+      item.image
+      ?
+      `
         <img
-          class="cardImage"
-          src="${escapeHTML(item.image)}"
-          alt="${escapeHTML(item.name)}"
+          src="${item.image}"
+          alt=""
         >
-
-      `;
-
-    }else{
-
-      imageHTML = `
-
-        <div class="cardImagePlaceholder">
-          ✦
+      `
+      :
+      `
+        <div
+          style="
+            width:100%;
+            height:100%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#9aa5b5;
+            font-size:13px;
+          "
+        >
+          이미지 없음
         </div>
-
       `;
-
-    }
 
 
     card.innerHTML = `
 
-      ${actions}
+      <div
+        class="thumb"
+        onclick="showDetail('${item.id}')"
+      >
+        ${image}
+      </div>
 
-      ${imageHTML}
 
-      <h3>
-        ${escapeHTML(item.name)}
-      </h3>
+      <div class="cardbody">
 
+        <h3>
+          ${escapeHTML(item.name)}
+        </h3>
+
+
+        ${
+          item.grade
+          ?
+          `
+            <p>
+              ${escapeHTML(item.grade)}
+            </p>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          adminMode
+          ?
+          `
+            <div class="cardactions">
+
+              <button
+                onclick="editItem('${item.id}')"
+              >
+                수정
+              </button>
+
+              <button
+                onclick="deleteItem('${item.id}')"
+              >
+                삭제
+              </button>
+
+            </div>
+          `
+          :
+          ""
+        }
+
+      </div>
     `;
-
-
-    card.onclick =
-      () => openDetail(item.id);
 
 
     grid.appendChild(card);
@@ -2625,29 +2161,1119 @@ function render(){
     items.length === 0
   ){
 
-    const empty =
-      document.createElement("div");
+    grid.innerHTML = `
 
+      <div class="emptyState">
 
-    empty.style.gridColumn =
-      "1 / -1";
+        아직 등록된 자료가 없습니다.
 
-    empty.style.textAlign =
-      "center";
+      </div>
 
-    empty.style.padding =
-      "50px 20px";
-
-    empty.style.color =
-      "#888";
-
-    empty.textContent =
-      "아직 등록된 자료가 없습니다.";
-
-
-    grid.appendChild(empty);
+    `;
 
   }
+
+}
+
+
+/* =========================================================
+   폴더 생성 / 수정
+========================================================= */
+
+function openFolderModal(id=null){
+
+  editingId = id;
+
+
+  const folder =
+    id
+    ?
+    data.folders.find(
+      f => f.id === id
+    )
+    :
+    null;
+
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+    folder
+    ?
+    "폴더 수정"
+    :
+    "폴더 만들기";
+
+
+  document
+    .getElementById("modalContent")
+    .innerHTML = `
+
+      <div class="formGrid">
+
+        <div class="row">
+
+          <label>
+            폴더 이름
+          </label>
+
+          <input
+            id="folderName"
+            value="${
+              folder
+              ?
+              escapeHTML(folder.name)
+              :
+              ""
+            }"
+          >
+
+        </div>
+
+
+        <div class="modalfoot">
+
+          <button
+            class="gradientBtn"
+            onclick="closeModal()"
+          >
+            취소
+          </button>
+
+          <button
+            class="gradientBtn"
+            onclick="saveFolder()"
+          >
+            저장
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+
+  document
+    .getElementById("modalBg")
+    .classList.add("show");
+
+}
+
+
+function editFolder(id){
+
+  openFolderModal(id);
+
+}
+
+
+async function saveFolder(){
+
+  const name =
+    document
+      .getElementById("folderName")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    alert(
+      "폴더 이름을 입력해주세요."
+    );
+
+    return;
+  }
+
+
+  if(editingId){
+
+    const folder =
+      data.folders.find(
+        f => f.id === editingId
+      );
+
+
+    if(folder){
+
+      folder.name = name;
+
+    }
+
+  }else{
+
+    data.folders.push({
+
+      id:uid(),
+
+      name:name,
+
+      parent:currentFolder
+
+    });
+
+  }
+
+
+  closeModal();
+
+  render();
+
+  await saveData();
+
+}
+
+
+async function deleteFolder(id){
+
+  if(id === "root"){
+
+    alert(
+      "전체 자료 폴더는 삭제할 수 없습니다."
+    );
+
+    return;
+  }
+
+
+  if(
+    !confirm(
+      "이 폴더를 삭제하시겠습니까?\n하위 자료도 함께 삭제됩니다."
+    )
+  ){
+
+    return;
+  }
+
+
+  data.folders =
+    data.folders.filter(
+      folder =>
+        folder.id !== id
+    );
+
+
+  data.items =
+    data.items.filter(
+      item =>
+        item.folder !== id
+    );
+
+
+  render();
+
+  await saveData();
+
+}
+
+
+/* =========================================================
+   정보 폴더 선택
+========================================================= */
+
+function getFolderOptions(){
+
+  return data.folders
+    .map(folder => {
+
+      if(folder.id === "root"){
+        return "";
+      }
+
+
+      return `
+
+        <option
+          value="${folder.id}"
+          ${
+            folder.id === currentFolder
+            ?
+            "selected"
+            :
+            ""
+          }
+        >
+          ${escapeHTML(folder.name)}
+        </option>
+
+      `;
+
+    })
+    .join("");
+
+}
+
+
+/* =========================================================
+   정보 생성 / 수정
+========================================================= */
+
+function openItemModal(id=null){
+
+  editingId = id;
+
+
+  const item =
+    id
+    ?
+    data.items.find(
+      i => i.id === id
+    )
+    :
+    null;
+
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+    item
+    ?
+    "정보 수정"
+    :
+    "정보 만들기";
+
+
+  document
+    .getElementById("modalContent")
+    .innerHTML =
+    itemFormHTML(item);
+
+
+  document
+    .getElementById("modalBg")
+    .classList.add("show");
+
+}
+
+
+function editItem(id){
+
+  openItemModal(id);
+
+}
+
+
+function itemFormHTML(item){
+
+  item =
+    item || {};
+
+
+  return `
+
+    <div class="formGrid">
+
+
+      <div class="row">
+
+        <label>
+          이름
+        </label>
+
+        <input
+          id="itemName"
+          value="${escapeHTML(item.name || "")}"
+        >
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          학년
+        </label>
+
+        <input
+          id="itemGrade"
+          value="${escapeHTML(item.grade || "")}"
+        >
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          간단 정보
+        </label>
+
+        <textarea
+          id="itemSimple"
+        >${escapeHTML(item.simple || "")}</textarea>
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          분야
+        </label>
+
+        <input
+          id="itemField"
+          value="${escapeHTML(item.field || "")}"
+        >
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          초능력
+        </label>
+
+        <textarea
+          id="itemAbility"
+        >${escapeHTML(item.ability || "")}</textarea>
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          좋아하는 것
+        </label>
+
+        <textarea
+          id="itemLikes"
+        >${escapeHTML(item.likes || "")}</textarea>
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          싫어하는 것
+        </label>
+
+        <textarea
+          id="itemDislikes"
+        >${escapeHTML(item.dislikes || "")}</textarea>
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          가족관계
+        </label>
+
+        <textarea
+          id="itemFamily"
+        >${escapeHTML(item.family || "")}</textarea>
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          이외의 관계
+        </label>
+
+        <textarea
+          id="itemRelations"
+        >${escapeHTML(item.relations || "")}</textarea>
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          추가 설명
+        </label>
+
+        <textarea
+          id="itemExtra"
+        >${escapeHTML(item.extra || "")}</textarea>
+
+      </div>
+
+
+      <div class="row">
+
+        <label>
+          대표 이미지
+        </label>
+
+        <input
+          id="itemImage"
+          type="file"
+          accept="image/*"
+          onchange="previewUpload(event)"
+        >
+
+
+        <div id="imagePreview">
+
+          ${
+            item.image
+            ?
+            `
+              <img
+                class="preview"
+                src="${item.image}"
+              >
+            `
+            :
+            ""
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="modalfoot">
+
+        <button
+          class="gradientBtn"
+          onclick="closeModal()"
+        >
+          취소
+        </button>
+
+        <button
+          class="gradientBtn"
+          onclick="saveItem()"
+        >
+          저장
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   이미지 미리보기
+========================================================= */
+
+function previewUpload(event){
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e){
+
+      document
+        .getElementById("imagePreview")
+        .innerHTML = `
+
+          <img
+            class="preview"
+            src="${e.target.result}"
+          >
+
+        `;
+
+    };
+
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================================================
+   이미지 업로드
+========================================================= */
+
+async function uploadImage(file){
+
+  if(!supabaseClient){
+
+    throw new Error(
+      "Supabase가 연결되지 않았습니다."
+    );
+
+  }
+
+
+  const extension =
+    file.name
+      .split(".")
+      .pop();
+
+
+  const path =
+    `${uid()}.${extension}`;
+
+
+  const result =
+    await supabaseClient
+      .storage
+      .from("academy-images")
+      .upload(
+        path,
+        file
+      );
+
+
+  if(result.error){
+
+    throw result.error;
+
+  }
+
+
+  return supabaseClient
+    .storage
+    .from("academy-images")
+    .getPublicUrl(path)
+    .data
+    .publicUrl;
+
+}
+
+
+/* =========================================================
+   정보 저장
+========================================================= */
+
+async function saveItem(){
+
+  const name =
+    document
+      .getElementById("itemName")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    alert(
+      "이름을 입력해주세요."
+    );
+
+    return;
+  }
+
+
+  let image = "";
+
+
+  if(editingId){
+
+    const oldItem =
+      data.items.find(
+        i => i.id === editingId
+      );
+
+    image =
+      oldItem?.image || "";
+
+  }
+
+
+  const file =
+    document
+      .getElementById("itemImage")
+      .files[0];
+
+
+  if(file){
+
+    try{
+
+      image =
+        await uploadImage(file);
+
+    }catch(error){
+
+      console.error(error);
+
+      alert(
+        "이미지 업로드에 실패했습니다.\nSupabase 설정을 확인해주세요."
+      );
+
+      return;
+    }
+
+  }
+
+
+  const itemData = {
+
+    name:name,
+
+    grade:
+      document
+        .getElementById("itemGrade")
+        .value,
+
+    simple:
+      document
+        .getElementById("itemSimple")
+        .value,
+
+    field:
+      document
+        .getElementById("itemField")
+        .value,
+
+    ability:
+      document
+        .getElementById("itemAbility")
+        .value,
+
+    likes:
+      document
+        .getElementById("itemLikes")
+        .value,
+
+    dislikes:
+      document
+        .getElementById("itemDislikes")
+        .value,
+
+    family:
+      document
+        .getElementById("itemFamily")
+        .value,
+
+    relations:
+      document
+        .getElementById("itemRelations")
+        .value,
+
+    extra:
+      document
+        .getElementById("itemExtra")
+        .value,
+
+    image:image,
+
+    folder:
+      editingId
+      ?
+      (
+        data.items.find(
+          i => i.id === editingId
+        )?.folder
+        ||
+        currentFolder
+      )
+      :
+      currentFolder
+
+  };
+
+
+  if(editingId){
+
+    const index =
+      data.items.findIndex(
+        i => i.id === editingId
+      );
+
+
+    if(index !== -1){
+
+      data.items[index] = {
+
+        ...data.items[index],
+
+        ...itemData
+
+      };
+
+    }
+
+  }else{
+
+    data.items.push({
+
+      id:uid(),
+
+      ...itemData
+
+    });
+
+  }
+
+
+  closeModal();
+
+  render();
+
+  await saveData();
+
+}
+
+
+/* =========================================================
+   정보 삭제
+========================================================= */
+
+async function deleteItem(id){
+
+  if(
+    !confirm(
+      "이 정보를 삭제하시겠습니까?"
+    )
+  ){
+
+    return;
+  }
+
+
+  data.items =
+    data.items.filter(
+      item =>
+        item.id !== id
+    );
+
+
+  render();
+
+  await saveData();
+
+}
+
+
+/* =========================================================
+   모달 닫기
+========================================================= */
+
+function closeModal(){
+
+  document
+    .getElementById("modalBg")
+    .classList.remove("show");
+
+
+  editingId = null;
+
+}
+
+
+/* =========================================================
+   상세 페이지
+========================================================= */
+
+function showDetail(id){
+
+  const item =
+    data.items.find(
+      i => i.id === id
+    );
+
+
+  if(!item){
+    return;
+  }
+
+
+  const detail =
+    document.getElementById(
+      "detailPage"
+    );
+
+
+  detail.innerHTML = `
+
+    <div class="detailHeader">
+
+      <h2>
+        ${escapeHTML(item.name)}
+      </h2>
+
+      ${
+        item.grade
+        ?
+        `
+          <p>
+            ${escapeHTML(item.grade)}
+          </p>
+        `
+        :
+        ""
+      }
+
+    </div>
+
+
+    ${
+      item.image
+      ?
+      `
+        <div class="detailImageWrap">
+
+          <img
+            class="detailImage"
+            src="${item.image}"
+            alt=""
+          >
+
+        </div>
+      `
+      :
+      ""
+    }
+
+
+    <div class="detailContent">
+
+
+      <table class="infoTable">
+
+
+        ${
+          item.simple
+          ?
+          `
+            <tr>
+
+              <th>
+                간단 정보
+              </th>
+
+              <td>
+                ${escapeHTML(item.simple)}
+              </td>
+
+            </tr>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          item.field
+          ?
+          `
+            <tr>
+
+              <th>
+                분야
+              </th>
+
+              <td>
+                ${escapeHTML(item.field)}
+              </td>
+
+            </tr>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          item.ability
+          ?
+          `
+            <tr>
+
+              <th>
+                초능력
+              </th>
+
+              <td>
+                ${escapeHTML(item.ability)}
+              </td>
+
+            </tr>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          item.likes
+          ?
+          `
+            <tr>
+
+              <th>
+                좋아하는 것
+              </th>
+
+              <td>
+                ${escapeHTML(item.likes)}
+              </td>
+
+            </tr>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          item.dislikes
+          ?
+          `
+            <tr>
+
+              <th>
+                싫어하는 것
+              </th>
+
+              <td>
+                ${escapeHTML(item.dislikes)}
+              </td>
+
+            </tr>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          item.family
+          ?
+          `
+            <tr>
+
+              <th>
+                가족관계
+              </th>
+
+              <td>
+                ${escapeHTML(item.family)}
+              </td>
+
+            </tr>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          item.relations
+          ?
+          `
+            <tr>
+
+              <th>
+                이외의 관계
+              </th>
+
+              <td>
+                ${escapeHTML(item.relations)}
+              </td>
+
+            </tr>
+          `
+          :
+          ""
+        }
+
+
+      </table>
+
+
+      ${
+        item.extra
+        ?
+        `
+          <section class="wikiSection">
+
+            <h3>
+              추가 설명
+            </h3>
+
+            <div class="wikiBody">
+              ${escapeHTML(item.extra)}
+            </div>
+
+          </section>
+        `
+        :
+        ""
+      }
+
+
+      ${
+        adminMode
+        ?
+        `
+          <div class="detailActions">
+
+            <button
+              onclick="
+                editItem('${item.id}');
+                closeDetail();
+              "
+            >
+              수정
+            </button>
+
+            <button
+              onclick="
+                deleteItem('${item.id}');
+                closeDetail();
+              "
+            >
+              삭제
+            </button>
+
+          </div>
+        `
+        :
+        ""
+      }
+
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById("detailOverlay")
+    .classList.add("show");
+
+
+  document.body.classList.add(
+    "detailOpen"
+  );
+
+}
+
+
+/* =========================================================
+   상세 닫기
+========================================================= */
+
+function closeDetail(){
+
+  document
+    .getElementById("detailOverlay")
+    .classList.remove("show");
+
+
+  document.body.classList.remove(
+    "detailOpen"
+  );
 
 }
 
@@ -2658,31 +3284,15 @@ function render(){
 
 document.addEventListener(
   "keydown",
-  function(e){
+  function(event){
 
-    if(e.key === "Escape"){
+    if(event.key === "Escape"){
+
+      closeModal();
 
       closeDetail();
 
-      closeItemModal();
-
     }
-
-  }
-);
-
-
-/* =========================================================
-   시작
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function(){
-
-    document
-      .getElementById("passwordInput")
-      .focus();
 
   }
 );
@@ -2691,4 +3301,3 @@ document.addEventListener(
 
 </body>
 </html>
-```
