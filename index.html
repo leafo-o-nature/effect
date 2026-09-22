@@ -1856,8 +1856,17 @@ async function saveData(){
 
       console.error(result.error);
 
+      const e = result.error;
+      const detail = [
+        e?.message,
+        e?.details,
+        e?.hint,
+        e?.code ? `code: ${e.code}` : ""
+      ].filter(Boolean).join("\n");
+
       alert(
-        "데이터 저장 중 문제가 발생했습니다."
+        "데이터 저장 중 문제가 발생했습니다.\n\n" +
+        (detail || "Supabase에서 오류 내용을 반환하지 않았습니다.")
       );
 
       return false;
