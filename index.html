@@ -1454,10 +1454,10 @@ const ADMIN_PASSWORD =
 */
 
 const SUPABASE_URL =
-  "https://ovvbiyhjxdtuyhbrouev.supabase.co";
+  "https://ytxkhbskrrrluzraakow.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_gtTFI5KR1woKaj2z7-MssQ_BDKOTpRg";
+  "sb_publishable_pyx61gETLHOFaMS48C5bfQ_8hR3pVW-";
 
 
 /*
@@ -1784,7 +1784,7 @@ async function loadData(){
 
     const result =
       await supabaseClient
-        .from("academy_data")
+        .from("academy-data")
         .select("data")
         .eq("id",1)
         .single();
@@ -1845,11 +1845,11 @@ async function saveData(){
 
     const result =
       await supabaseClient
-        .from("academy_data")
-        .update({
+        .from("academy-data")
+        .upsert({
+          id:1,
           data:data
-        })
-        .eq("id",1);
+        },{ onConflict:"id" });
 
 
     if(result.error){
