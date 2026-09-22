@@ -1,3310 +1,1324 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>이펙필드 아카데미</title>
-
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect Field Academy</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+      color: #35444a;
+
+      background:
+        linear-gradient(
+          135deg,
+          #9cd098,
+          #94d3e1,
+          #9fb6fc,
+          #9cd098
+        );
+
+      background-size: 300% 300%;
+      animation: backgroundMove 15s ease infinite;
+    }
+
+    @keyframes backgroundMove {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(1150px, calc(100% - 30px));
+      margin: auto;
+      padding: 45px 0 70px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 35px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(35px, 6vw, 60px);
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+
+    header p {
+      margin: 10px 0 0;
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    /* =========================
+       PANEL
+    ========================= */
+
+    .panel {
+      padding: 30px;
+      border-radius: 28px;
+
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+
+      border: 1px solid rgba(255, 255, 255, 0.7);
+
+      box-shadow:
+        0 20px 60px rgba(54, 90, 120, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .section-title {
+      margin: 0 0 22px;
+      color: #40545c;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    /* =========================
+       IMAGE
+    ========================= */
+
+    .image-area {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .preview {
+      width: 180px;
+      height: 180px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-<style>
+      overflow: hidden;
+
+      border-radius: 24px;
 
-/* =========================================================
-   기본 색상
-========================================================= */
+      background:
+        linear-gradient(
+          135deg,
+          #dff1e5,
+          #d9eef4,
+          #e4e8ff
+        );
+
+      color: #7c9299;
+      font-size: 13px;
+
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-:root{
-  --green:#9CD098;
-  --cyan:#94D3E1;
-  --blue:#9FB6FC;
+    .image-info p {
+      margin: 0 0 14px;
+      color: #64767d;
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-  --text:#26334a;
-  --sub:#718096;
+    .file-input {
+      display: none;
+    }
+
+    .upload-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 11px 17px;
+
+      border-radius: 12px;
+
+      background: #edf7f7;
+      border: 1px solid #d6e8ea;
+
+      color: #46666d;
+      font-weight: 700;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+
+      color: #5a6c73;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+
+      padding: 13px 15px;
+
+      border: 1px solid #dbe5e8;
+      border-radius: 14px;
+
+      outline: none;
+
+      background: rgba(255, 255, 255, 0.8);
+      color: #263238;
+
+      transition: 0.2s;
+    }
+
+    .field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: #94cfd5;
+
+      box-shadow:
+        0 0 0 4px rgba(148, 211, 225, 0.18);
+
+      background: white;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
 
-  --border:#dce4ef;
+    .btn {
+      padding: 12px 19px;
 
-  --gradient:
-    linear-gradient(
-      135deg,
-      #9CD098 0%,
-      #94D3E1 35%,
-      #9FB6FC 65%,
-      #94D3E1 85%,
-      #9CD098 100%
-    );
+      border: none;
+      border-radius: 13px;
 
-  --button-gradient:
-    linear-gradient(
-      90deg,
-      #9CD098,
-      #94D3E1,
-      #9FB6FC
-    );
-}
+      font-weight: 750;
 
+      transition:
+        transform 0.15s,
+        box-shadow 0.15s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
 
-/* =========================================================
-   전체
-========================================================= */
+    .btn-primary {
+      background:
+        linear-gradient(
+          135deg,
+          #8bcf9d,
+          #8ccbd9
+        );
 
-*{
-  box-sizing:border-box;
-}
+      color: white;
 
-html,
-body{
-  margin:0;
-  padding:0;
-  min-height:100%;
-}
+      box-shadow:
+        0 7px 20px rgba(110, 177, 181, 0.22);
+    }
 
-body{
-  font-family:
-    Arial,
-    "Noto Sans KR",
-    sans-serif;
+    .btn-secondary {
+      background: #edf3f5;
+      color: #52676e;
+    }
 
-  color:var(--text);
+    /* =========================
+       SAVED CHARACTERS
+    ========================= */
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(156,208,152,.38),
-      rgba(148,211,225,.38),
-      rgba(159,182,252,.38),
-      rgba(148,211,225,.38),
-      rgba(156,208,152,.38)
-    );
+    .saved-section {
+      margin-top: 30px;
+    }
 
-  background-attachment:fixed;
-}
+    .saved-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
 
-body.detailOpen{
-  overflow:hidden;
-}
+    .saved-header h2 {
+      margin: 0;
+      color: #40545c;
+      font-size: 21px;
+    }
 
-button,
-input,
-textarea,
-select{
-  font:inherit;
-}
+    .refresh-btn {
+      padding: 9px 13px;
 
+      border: none;
+      border-radius: 10px;
 
-/* =========================================================
-   공통 버튼
-========================================================= */
+      background: rgba(255, 255, 255, 0.65);
+      color: #60747a;
 
-.gradientBtn{
-  border:0;
+      font-weight: 700;
+    }
 
-  background:var(--button-gradient);
+    .saved-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
 
-  color:white;
+    .saved-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
 
-  font-weight:600;
+      padding: 15px;
 
-  border-radius:10px;
+      border-radius: 20px;
 
-  padding:10px 17px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+    }
 
-  cursor:pointer;
+    .saved-thumb {
+      width: 75px;
+      height: 75px;
 
-  box-shadow:
-    0 4px 12px rgba(120,150,200,.16);
+      flex-shrink: 0;
 
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease,
-    filter .15s ease;
-}
+      overflow: hidden;
 
-.gradientBtn:hover{
-  transform:translateY(-2px);
+      border-radius: 15px;
 
-  box-shadow:
-    0 7px 17px rgba(120,150,200,.25);
+      background: #e6eff1;
+    }
 
-  filter:saturate(1.05);
-}
+    .saved-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-.gradientBtn:active{
-  transform:translateY(0);
-}
+    .saved-info {
+      min-width: 0;
+      flex: 1;
+    }
 
+    .saved-info h3 {
+      margin: 0 0 5px;
 
-/* =========================================================
-   처음 비밀번호 화면
-========================================================= */
+      font-size: 16px;
 
-#lockScreen{
-  position:fixed;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-  inset:0;
+    .saved-info p {
+      margin: 0;
 
-  z-index:99999;
+      color: #718188;
+      font-size: 12px;
+    }
 
-  display:flex;
+    .saved-buttons {
+      display: flex;
+      gap: 6px;
+      margin-top: 9px;
+    }
 
-  justify-content:center;
-  align-items:center;
+    .small-btn {
+      padding: 7px 9px;
 
-  padding:20px;
+      border: none;
+      border-radius: 8px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #9CD098 0%,
-      #94D3E1 35%,
-      #9FB6FC 65%,
-      #94D3E1 85%,
-      #9CD098 100%
-    );
-}
+      background: #eef4f5;
+      color: #587078;
 
-.lockBox{
-  width:min(410px,90vw);
+      font-size: 11px;
+      font-weight: 700;
+    }
 
-  padding:40px 34px;
+    .small-btn.delete {
+      background: #f7ebed;
+      color: #a1646d;
+    }
 
-  background:rgba(255,255,255,.96);
+    .empty {
+      grid-column: 1 / -1;
 
-  border-radius:20px;
+      padding: 45px 20px;
 
-  box-shadow:
-    0 18px 50px rgba(50,70,100,.18);
+      border-radius: 18px;
 
-  text-align:center;
-}
+      background: rgba(255, 255, 255, 0.55);
 
-.lockBox h1{
-  margin:0;
+      color: #789097;
 
-  color:#111827;
+      text-align: center;
+    }
 
-  font-size:28px;
+    /* =========================
+       TOAST
+    ========================= */
 
-  letter-spacing:-.5px;
-}
+    .status {
+      position: fixed;
 
-.lockBox p{
-  margin:12px 0 24px;
+      left: 50%;
+      bottom: 25px;
 
-  color:var(--sub);
+      transform:
+        translateX(-50%)
+        translateY(20px);
 
-  font-size:14px;
-}
+      padding: 12px 18px;
 
-.lockInput{
-  width:100%;
+      border-radius: 13px;
 
-  height:48px;
+      background: rgba(45, 59, 64, 0.92);
+      color: white;
 
-  padding:0 15px;
+      font-size: 13px;
 
-  border:1px solid var(--border);
+      opacity: 0;
+      pointer-events: none;
 
-  border-radius:10px;
+      transition: 0.25s;
 
-  outline:none;
+      z-index: 1000;
+      white-space: nowrap;
+    }
 
-  text-align:center;
+    .status.show {
+      opacity: 1;
 
-  background:#fff;
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
 
-  transition:.2s;
-}
+    /* =========================
+       MOBILE
+    ========================= */
 
-.lockInput:focus{
-  border-color:#9FB6FC;
+    @media (max-width: 700px) {
 
-  box-shadow:
-    0 0 0 3px rgba(159,182,252,.16);
-}
+      .app {
+        width: calc(100% - 20px);
+        padding-top: 25px;
+      }
 
-.lockButton{
-  width:100%;
+      .panel {
+        padding: 20px;
+        border-radius: 22px;
+      }
 
-  height:48px;
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
 
-  margin-top:12px;
+      .image-area {
+        grid-template-columns: 1fr;
+      }
 
-  border:0;
+      .preview {
+        width: 150px;
+        height: 150px;
+      }
 
-  border-radius:10px;
-
-  background:var(--button-gradient);
-
-  color:white;
-
-  font-weight:600;
-
-  cursor:pointer;
-
-  transition:.15s;
-}
-
-.lockButton:hover{
-  transform:translateY(-2px);
-
-  box-shadow:
-    0 7px 18px rgba(120,150,200,.25);
-}
-
-.errorText{
-  min-height:20px;
-
-  margin-top:12px;
-
-  color:#ec6fa3;
-
-  font-size:14px;
-}
-
-
-/* =========================================================
-   메인 전체
-========================================================= */
-
-.mainPage{
-  width:100%;
-
-  min-height:100vh;
-
-  padding:55px 0 80px;
-}
-
-.wrap{
-  width:80%;
-
-  max-width:1180px;
-
-  margin:0 auto;
-}
-
-
-/* =========================================================
-   상단 제목
-========================================================= */
-
-.hero{
-  text-align:center;
-
-  margin-bottom:35px;
-}
-
-.hero h1{
-  margin:0;
-
-  color:#111827;
-
-  font-size:42px;
-
-  font-weight:800;
-
-  letter-spacing:-1.5px;
-}
-
-.hero p{
-  margin:12px 0 0;
-
-  color:#667085;
-
-  font-size:15px;
-}
-
-
-/* =========================================================
-   관리자 버튼
-========================================================= */
-
-.adminToggle{
-  position:fixed;
-
-  left:0;
-  top:50%;
-
-  transform:translateY(-50%);
-
-  width:34px;
-  height:68px;
-
-  border:0;
-
-  border-radius:0 12px 12px 0;
-
-  background:var(--button-gradient);
-
-  color:white;
-
-  font-size:18px;
-
-  cursor:pointer;
-
-  z-index:5000;
-
-  box-shadow:
-    0 5px 18px rgba(80,100,140,.2);
-}
-
-.adminToggle:hover{
-  width:39px;
-}
-
-
-/* =========================================================
-   관리자 패널
-========================================================= */
-
-.adminPanel{
-  position:fixed;
-
-  left:-360px;
-  top:0;
-
-  width:20vw;
-
-  min-width:260px;
-  max-width:360px;
-
-  height:100vh;
-
-  padding:30px 23px;
-
-  background:rgba(255,255,255,.98);
-
-  box-shadow:
-    8px 0 35px rgba(30,50,80,.15);
-
-  z-index:4999;
-
-  transition:left .25s ease;
-}
-
-.adminPanel.open{
-  left:0;
-}
-
-.adminPanel h2{
-  margin-top:0;
-
-  color:#111827;
-}
-
-.adminPanel p{
-  color:var(--sub);
-
-  font-size:13px;
-
-  line-height:1.6;
-}
-
-.adminPanel input{
-  width:100%;
-
-  height:44px;
-
-  padding:0 12px;
-
-  border:1px solid var(--border);
-
-  border-radius:10px;
-
-  outline:none;
-}
-
-.adminPanel button{
-  width:100%;
-
-  margin-top:10px;
-
-  height:43px;
-
-  border:0;
-
-  border-radius:10px;
-
-  background:var(--button-gradient);
-
-  color:white;
-
-  cursor:pointer;
-
-  font-weight:600;
-}
-
-.adminStatus{
-  margin-top:15px;
-
-  padding:10px;
-
-  border-radius:9px;
-
-  background:#f5f7fb;
-
-  color:var(--sub);
-
-  font-size:13px;
-
-  text-align:center;
-}
-
-
-/* =========================================================
-   생성 패널
-========================================================= */
-
-.createPanel{
-  display:none;
-
-  margin-bottom:22px;
-
-  padding:18px;
-
-  background:rgba(255,255,255,.82);
-
-  border:1px solid rgba(255,255,255,.8);
-
-  border-radius:15px;
-
-  box-shadow:
-    0 5px 20px rgba(80,100,130,.07);
-}
-
-.createPanel.active{
-  display:flex;
-
-  gap:10px;
-}
-
-
-/* =========================================================
-   툴바
-========================================================= */
-
-.toolbar{
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:15px;
-
-  margin-bottom:18px;
-}
-
-.homeButton{
-  border:0;
-
-  border-radius:10px;
-
-  padding:9px 15px;
-
-  background:white;
-
-  color:#344054;
-
-  cursor:pointer;
-
-  box-shadow:
-    0 3px 12px rgba(50,70,100,.07);
-}
-
-.homeButton:hover{
-  background:#f9fafc;
-}
-
-.currentPath{
-  color:#758195;
-
-  font-size:14px;
-}
-
-
-/* =========================================================
-   자료 영역
-========================================================= */
-
-.contentBox{
-  background:rgba(255,255,255,.84);
-
-  border:1px solid rgba(255,255,255,.9);
-
-  border-radius:18px;
-
-  padding:25px;
-
-  box-shadow:
-    0 10px 35px rgba(60,80,110,.08);
-}
-
-.grid{
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:20px;
-}
-
-
-/* =========================================================
-   카드
-========================================================= */
-
-.card{
-  overflow:hidden;
-
-  background:white;
-
-  border:1px solid #e4e9f0;
-
-  border-radius:14px;
-
-  box-shadow:
-    0 5px 18px rgba(50,70,100,.06);
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
-}
-
-.card:hover{
-  transform:translateY(-3px);
-
-  box-shadow:
-    0 10px 25px rgba(50,70,100,.11);
-}
-
-.thumb{
-  width:100%;
-
-  aspect-ratio:1 / 1;
-
-  background:#f1f4f8;
-
-  cursor:pointer;
-
-  overflow:hidden;
-}
-
-.thumb img{
-  width:100%;
-  height:100%;
-
-  object-fit:cover;
-
-  display:block;
-}
-
-.folderThumb{
-  width:100%;
-  height:100%;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  font-size:52px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(156,208,152,.18),
-      rgba(148,211,225,.18),
-      rgba(159,182,252,.18)
-    );
-}
-
-.cardbody{
-  padding:15px;
-}
-
-.cardbody h3{
-  margin:0;
-
-  color:#111827;
-
-  font-size:17px;
-
-  font-weight:700;
-}
-
-.cardbody p{
-  margin:7px 0 0;
-
-  color:#788397;
-
-  font-size:13px;
-}
-
-.cardactions{
-  display:flex;
-
-  gap:7px;
-
-  margin-top:12px;
-}
-
-.cardactions button{
-  flex:1;
-
-  border:0;
-
-  border-radius:8px;
-
-  padding:7px;
-
-  background:var(--button-gradient);
-
-  color:white;
-
-  font-size:12px;
-
-  cursor:pointer;
-}
-
-
-/* =========================================================
-   모달
-========================================================= */
-
-.modalBg{
-  display:none;
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:7000;
-
-  padding:30px;
-
-  background:rgba(25,35,55,.35);
-
-  align-items:center;
-
-  justify-content:center;
-}
-
-.modalBg.show{
-  display:flex;
-}
-
-.modal{
-  width:min(700px,90vw);
-
-  max-height:88vh;
-
-  overflow:auto;
-
-  padding:28px;
-
-  background:white;
-
-  border-radius:18px;
-
-  box-shadow:
-    0 20px 60px rgba(20,30,50,.2);
-}
-
-.modal h2{
-  margin-top:0;
-
-  color:#111827;
-}
-
-.formGrid{
-  display:grid;
-
-  gap:15px;
-}
-
-.row label{
-  display:block;
-
-  margin-bottom:6px;
-
-  color:#344054;
-
-  font-size:13px;
-
-  font-weight:700;
-}
-
-.row input,
-.row textarea,
-.row select{
-  width:100%;
-
-  padding:10px 12px;
-
-  border:1px solid var(--border);
-
-  border-radius:9px;
-
-  outline:none;
-
-  background:#fff;
-}
-
-.row input:focus,
-.row textarea:focus,
-.row select:focus{
-  border-color:#9FB6FC;
-
-  box-shadow:
-    0 0 0 3px rgba(159,182,252,.12);
-}
-
-.row textarea{
-  min-height:90px;
-
-  resize:vertical;
-}
-
-.modalfoot{
-  display:flex;
-
-  justify-content:flex-end;
-
-  gap:9px;
-
-  margin-top:20px;
-}
-
-.modalfoot button{
-  border:0;
-
-  border-radius:9px;
-
-  padding:10px 17px;
-
-  background:var(--button-gradient);
-
-  color:white;
-
-  cursor:pointer;
-}
-
-.preview{
-  display:block;
-
-  max-width:180px;
-  max-height:180px;
-
-  margin-top:10px;
-
-  border-radius:10px;
-
-  object-fit:cover;
-}
-
-
-/* =========================================================
-   상세 페이지
-   처음 만들었던 나무위키식 창
-========================================================= */
-
-.detailOverlay{
-  display:none;
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:8000;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:5vh 10vw;
-
-  background:
-    rgba(35,45,65,.34);
-}
-
-.detailOverlay.show{
-  display:flex;
-}
-
-.detailPage{
-  position:relative;
-
-  width:80vw;
-
-  height:90vh;
-
-  overflow:auto;
-
-  background:white;
-
-  border-radius:18px;
-
-  box-shadow:
-    0 20px 70px rgba(20,30,50,.22);
-}
-
-
-/* 상세 상단 */
-
-.detailHeader{
-  padding:30px 38px 20px;
-
-  border-bottom:1px solid #e7ebf1;
-}
-
-.detailHeader h2{
-  margin:0;
-
-  color:#111827;
-
-  font-size:30px;
-
-  letter-spacing:-.7px;
-}
-
-.detailHeader p{
-  margin:8px 0 0;
-
-  color:#788397;
-
-  font-size:14px;
-}
-
-
-/* 상세 이미지 */
-
-.detailImageWrap{
-  padding:25px 38px 0;
-}
-
-.detailImage{
-  display:block;
-
-  width:100%;
-
-  max-height:470px;
-
-  object-fit:contain;
-
-  background:#f5f7fa;
-
-  border-radius:12px;
-}
-
-
-/* 상세 내용 */
-
-.detailContent{
-  padding:30px 38px 50px;
-}
-
-
-/* 나무위키식 표 */
-
-.infoTable{
-  width:100%;
-
-  border-collapse:collapse;
-
-  margin-bottom:30px;
-
-  border-top:2px solid #dfe5ed;
-}
-
-.infoTable th,
-.infoTable td{
-  padding:12px 14px;
-
-  border-bottom:1px solid #e4e8ee;
-
-  text-align:left;
-
-  vertical-align:top;
-
-  line-height:1.6;
-}
-
-.infoTable th{
-  width:145px;
-
-  background:#f5f7fa;
-
-  color:#4b5565;
-
-  font-size:13px;
-
-  font-weight:700;
-}
-
-.infoTable td{
-  color:#354052;
-
-  font-size:14px;
-
-  white-space:pre-wrap;
-}
-
-
-/* 추가 설명 */
-
-.wikiSection{
-  margin-top:30px;
-}
-
-.wikiSection h3{
-  margin:0;
-
-  padding:11px 13px;
-
-  color:#344054;
-
-  background:#f4f6f9;
-
-  border-left:4px solid #9FB6FC;
-
-  font-size:17px;
-}
-
-.wikiBody{
-  padding:17px 14px;
-
-  color:#3f4a5b;
-
-  line-height:1.8;
-
-  white-space:pre-wrap;
-
-  font-size:14px;
-}
-
-
-/* 상세 닫기 */
-
-.detailClose{
-  position:fixed;
-
-  top:calc(5vh - 18px);
-
-  right:calc(10vw - 18px);
-
-  width:40px;
-  height:40px;
-
-  border:0;
-
-  border-radius:50%;
-
-  background:var(--button-gradient);
-
-  color:white;
-
-  font-size:21px;
-
-  line-height:40px;
-
-  cursor:pointer;
-
-  z-index:9000;
-
-  box-shadow:
-    0 5px 18px rgba(50,70,100,.2);
-}
-
-
-/* 상세 관리자 버튼 */
-
-.detailActions{
-  display:flex;
-
-  gap:8px;
-
-  margin-top:30px;
-}
-
-.detailActions button{
-  border:0;
-
-  border-radius:9px;
-
-  padding:9px 15px;
-
-  background:var(--button-gradient);
-
-  color:white;
-
-  cursor:pointer;
-}
-
-
-/* =========================================================
-   빈 자료
-========================================================= */
-
-.emptyState{
-  grid-column:1/-1;
-
-  padding:70px 20px;
-
-  text-align:center;
-
-  color:#8792a5;
-
-  font-size:14px;
-}
-
-
-/* =========================================================
-   모바일
-========================================================= */
-
-@media(max-width:700px){
-
-  .mainPage{
-    padding:35px 0 50px;
-  }
-
-  .wrap{
-    width:92%;
-  }
-
-  .hero{
-    margin-bottom:25px;
-  }
-
-  .hero h1{
-    font-size:30px;
-  }
-
-  .hero p{
-    font-size:13px;
-
-    line-height:1.6;
-  }
-
-  .contentBox{
-    padding:15px;
-
-    border-radius:14px;
-  }
-
-  .grid{
-    grid-template-columns:
-      repeat(2,1fr);
-
-    gap:12px;
-  }
-
-  .cardbody{
-    padding:11px;
-  }
-
-  .cardbody h3{
-    font-size:14px;
-  }
-
-  .cardbody p{
-    font-size:12px;
-  }
-
-  .createPanel{
-    flex-direction:column;
-  }
-
-  .createPanel button{
-    width:100%;
-  }
-
-  .adminPanel{
-    width:82vw;
-  }
-
-  /* 상세창 */
-
-  .detailOverlay{
-    padding:0;
-  }
-
-  .detailPage{
-    width:100vw;
-
-    height:100vh;
-
-    border-radius:0;
-  }
-
-  .detailClose{
-    top:13px;
-
-    right:13px;
-  }
-
-  .detailHeader{
-    padding:25px 20px 17px;
-
-    padding-right:65px;
-  }
-
-  .detailHeader h2{
-    font-size:24px;
-  }
-
-  .detailImageWrap{
-    padding:18px 20px 0;
-  }
-
-  .detailContent{
-    padding:22px 20px 40px;
-  }
-
-  .infoTable th{
-    width:95px;
-  }
-
-  .infoTable th,
-  .infoTable td{
-    padding:10px;
-
-    font-size:13px;
-  }
-
-  .modalBg{
-    padding:15px;
-  }
-
-  .modal{
-    width:100%;
-
-    max-height:92vh;
-
-    padding:22px;
-
-    border-radius:16px;
-  }
-}
-
-</style>
+      .saved-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+<div class="app">
 
-<!-- =========================================================
-     비밀번호 화면
-========================================================= -->
+  <!-- HEADER -->
 
-<div id="lockScreen">
+  <header>
+    <h1>Effect Field Academy</h1>
+    <p>academy for using superpowers in the right place</p>
+  </header>
 
-  <div class="lockBox">
 
-    <h1>이펙필드 아카데미</h1>
+  <!-- CHARACTER FORM -->
 
-    <p>
-      아카데미 자료를 확인하려면<br>
-      비밀번호를 입력해주세요.
-    </p>
+  <section class="panel">
 
-    <input
-      id="sitePassword"
-      class="lockInput"
-      type="password"
-      placeholder="비밀번호"
-      autocomplete="off"
-      onkeydown="
-        if(event.key === 'Enter'){
-          unlock();
-        }
-      "
-    >
+    <h2 class="section-title">
+      Character Information
+    </h2>
 
-    <button
-      class="lockButton"
-      onclick="unlock()"
-    >
-      입장하기
-    </button>
 
-    <div
-      id="lockError"
-      class="errorText"
-    ></div>
+    <!-- IMAGE -->
 
-  </div>
-
-</div>
-
-
-<!-- =========================================================
-     관리자 버튼
-========================================================= -->
-
-<button
-  class="adminToggle"
-  onclick="toggleAdminPanel()"
->
-  &gt;
-</button>
-
-
-<div
-  id="adminPanel"
-  class="adminPanel"
->
-
-  <h2>관리자</h2>
-
-  <p>
-    관리자 비밀번호를 입력하면<br>
-    자료를 추가하거나 수정할 수 있습니다.
-  </p>
-
-  <input
-    id="adminPassword"
-    type="password"
-    placeholder="관리자 비밀번호"
-  >
-
-  <button onclick="unlockAdmin()">
-    관리자 모드 켜기
-  </button>
-
-  <button onclick="disableAdmin()">
-    관리자 모드 끄기
-  </button>
-
-  <div
-    id="adminStatus"
-    class="adminStatus"
-  >
-    일반 모드
-  </div>
-
-</div>
-
-
-<!-- =========================================================
-     메인
-========================================================= -->
-
-<div class="mainPage">
-
-  <main class="wrap">
-
-    <header class="hero">
-
-      <h1>
-        이펙필드 아카데미
-      </h1>
-
-      <p>
-        초능력을 올바른 곳에 사용하는 것을 목적으로 하는 다양한 분야의 아카데미
-      </p>
-
-    </header>
-
-
-    <!-- 관리자 생성 버튼 -->
-
-    <section
-      id="createPanel"
-      class="createPanel"
-    >
-
-      <button
-        class="gradientBtn"
-        onclick="openFolderModal()"
-      >
-        + 폴더 만들기
-      </button>
-
-      <button
-        class="gradientBtn"
-        onclick="openItemModal()"
-      >
-        + 정보 만들기
-      </button>
-
-    </section>
-
-
-    <!-- 자료 창 -->
-
-    <section class="contentBox">
-
-      <div class="toolbar">
-
-        <button
-          class="homeButton"
-          onclick="goHome()"
-        >
-          🏠 전체 자료
-        </button>
-
-        <span
-          id="currentPath"
-          class="currentPath"
-        ></span>
-
-      </div>
-
-
-      <section
-        id="grid"
-        class="grid"
-      ></section>
-
-    </section>
-
-  </main>
-
-</div>
-
-
-<!-- =========================================================
-     생성 / 수정 모달
-========================================================= -->
-
-<div
-  id="modalBg"
-  class="modalBg"
-  onclick="
-    if(event.target === this){
-      closeModal();
-    }
-  "
->
-
-  <div class="modal">
-
-    <h2 id="modalTitle"></h2>
-
-    <div id="modalContent"></div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================================================
-     상세 페이지
-========================================================= -->
-
-<div
-  id="detailOverlay"
-  class="detailOverlay"
-  onclick="
-    if(event.target === this){
-      closeDetail();
-    }
-  "
->
-
-  <div
-    id="detailPage"
-    class="detailPage"
-  ></div>
-
-
-  <button
-    class="detailClose"
-    onclick="closeDetail()"
-  >
-    ×
-  </button>
-
-</div>
-
-
-<script>
-
-/* =========================================================
-   기본 설정
-========================================================= */
-
-
-/*
-  사이트 입장 비밀번호
-
-  모든 사람이 사용하는 공용 비밀번호
-*/
-
-const SITE_PASSWORD = "1234";
-
-
-/*
-  관리자 비밀번호
-*/
-
-const ADMIN_PASSWORD =
-  "Leeafnatureminna0103399";
-
-
-/*
-  Supabase 설정
-
-  아래 두 곳에 본인의 Supabase 정보를 넣으면
-  기기 간 데이터 공유가 가능합니다.
-*/
-
-const SUPABASE_URL =
-  "https://ytxkhbskrrrluzraakow.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_pyx61gETLHOFaMS48C5bfQ_8hR3pVW-";
-
-
-/*
-  중요한 부분
-
-  Supabase는 처음부터 실행하지 않습니다.
-
-  먼저 1234 비밀번호를 확인하고,
-  입장한 뒤에 Supabase를 연결합니다.
-
-  따라서 Supabase 설정이 잘못되어 있어도
-  비밀번호 화면은 정상적으로 작동합니다.
-*/
-
-let supabaseClient = null;
-
-
-/* =========================================================
-   기본 데이터
-========================================================= */
-
-let data = {
-
-  folders:[
-    {
-      id:"root",
-      name:"전체 자료",
-      parent:null
-    }
-  ],
-
-  items:[]
-
-};
-
-
-let currentFolder = "root";
-
-let adminMode = false;
-
-let editingId = null;
-
-
-/* =========================================================
-   Supabase 연결
-========================================================= */
-
-function initSupabase(){
-
-  if(
-    !SUPABASE_URL ||
-    !SUPABASE_KEY ||
-    SUPABASE_URL.includes("여기에_") ||
-    SUPABASE_KEY.includes("여기에_")
-  ){
-
-    console.warn(
-      "Supabase 설정이 아직 완료되지 않았습니다."
-    );
-
-    return false;
-  }
-
-
-  if(
-    !window.supabase ||
-    !window.supabase.createClient
-  ){
-
-    console.error(
-      "Supabase 라이브러리를 불러오지 못했습니다."
-    );
-
-    return false;
-  }
-
-
-  try{
-
-    supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-    return true;
-
-  }catch(error){
-
-    console.error(error);
-
-    return false;
-  }
-
-}
-
-
-/* =========================================================
-   처음 비밀번호
-========================================================= */
-
-function unlock(){
-
-  const input =
-    document.getElementById(
-      "sitePassword"
-    );
-
-  const error =
-    document.getElementById(
-      "lockError"
-    );
-
-
-  /*
-    비밀번호가 맞을 경우
-  */
-
-  if(
-    input.value === SITE_PASSWORD
-  ){
-
-    error.textContent = "";
-
-    document
-      .getElementById("lockScreen")
-      .style.display = "none";
-
-
-    /*
-      비밀번호를 localStorage나
-      sessionStorage에 저장하지 않습니다.
-
-      따라서 다른 기기에서도
-      다시 1234를 입력하면 됩니다.
-    */
-
-
-    /*
-      Supabase 연결
-    */
-
-    if(initSupabase()){
-
-      loadData();
-
-    }else{
-
-      render();
-
-    }
-
-    return;
-  }
-
-
-  /*
-    비밀번호가 틀렸을 경우
-  */
-
-  error.textContent =
-    "비밀번호가 맞지 않습니다";
-
-
-  input.value = "";
-
-  input.focus();
-
-}
-
-
-/* =========================================================
-   처음 시작
-========================================================= */
-
-window.addEventListener(
-  "DOMContentLoaded",
-  function(){
-
-    /*
-      로그인 기록을 확인하지 않습니다.
-
-      매번 사이트에 처음 들어오면
-      1234를 입력하도록 합니다.
-    */
-
-    document
-      .getElementById("sitePassword")
-      .focus();
-
-  }
-);
-
-
-/* =========================================================
-   관리자
-========================================================= */
-
-function toggleAdminPanel(){
-
-  document
-    .getElementById("adminPanel")
-    .classList.toggle("open");
-
-}
-
-
-function unlockAdmin(){
-
-  const password =
-    document
-      .getElementById("adminPassword")
-      .value;
-
-
-  if(
-    password === ADMIN_PASSWORD
-  ){
-
-    adminMode = true;
-
-
-    document
-      .getElementById("createPanel")
-      .classList.add("active");
-
-
-    document
-      .getElementById("adminStatus")
-      .textContent =
-      "관리자 모드 활성화";
-
-
-    render();
-
-  }else{
-
-    alert(
-      "관리자 비밀번호가 맞지 않습니다."
-    );
-
-  }
-
-}
-
-
-function disableAdmin(){
-
-  adminMode = false;
-
-
-  document
-    .getElementById("createPanel")
-    .classList.remove("active");
-
-
-  document
-    .getElementById("adminStatus")
-    .textContent =
-    "일반 모드";
-
-
-  render();
-
-}
-
-
-/* =========================================================
-   ID
-========================================================= */
-
-function uid(){
-
-  return Date.now().toString(36)
-    +
-    Math.random()
-      .toString(36)
-      .slice(2);
-
-}
-
-
-/* =========================================================
-   HTML escape
-========================================================= */
-
-function escapeHTML(value){
-
-  if(
-    value === undefined ||
-    value === null
-  ){
-
-    return "";
-
-  }
-
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================================
-   데이터 불러오기
-========================================================= */
-
-async function loadData(){
-
-  if(!supabaseClient){
-
-    render();
-
-    return;
-  }
-
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("academy-data")
-        .select("data")
-        .eq("id",1)
-        .single();
-
-
-    if(result.error){
-
-      console.error(result.error);
-
-      render();
-
-      return;
-    }
-
-
-    if(
-      result.data &&
-      result.data.data
-    ){
-
-      data =
-        result.data.data;
-
-    }
-
-
-    render();
-
-  }catch(error){
-
-    console.error(error);
-
-    render();
-
-  }
-
-}
-
-
-/* =========================================================
-   데이터 저장
-========================================================= */
-
-async function saveData(){
-
-  if(!supabaseClient){
-
-    alert(
-      "Supabase 설정이 필요합니다.\n\n" +
-      "SUPABASE_URL과 SUPABASE_KEY를 입력해주세요."
-    );
-
-    return false;
-  }
-
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("academy-data")
-        .upsert({
-          id:1,
-          data:data
-        },{ onConflict:"id" });
-
-
-    if(result.error){
-
-      console.error(result.error);
-
-      const e = result.error;
-      const detail = [
-        e?.message,
-        e?.details,
-        e?.hint,
-        e?.code ? `code: ${e.code}` : ""
-      ].filter(Boolean).join("\n");
-
-      alert(
-        "데이터 저장 중 문제가 발생했습니다.\n\n" +
-        (detail || "Supabase에서 오류 내용을 반환하지 않았습니다.")
-      );
-
-      return false;
-    }
-
-
-    return true;
-
-  }catch(error){
-
-    console.error(error);
-
-    return false;
-  }
-
-}
-
-
-/* =========================================================
-   폴더 관련
-========================================================= */
-
-function getCurrentFolder(){
-
-  return data.folders.find(
-    folder =>
-      folder.id === currentFolder
-  );
-
-}
-
-
-function getFolderPath(){
-
-  const path = [];
-
-  let folder =
-    getCurrentFolder();
-
-
-  while(folder){
-
-    path.unshift(folder);
-
-    folder =
-      data.folders.find(
-        f =>
-          f.id === folder.parent
-      );
-
-  }
-
-
-  return path;
-
-}
-
-
-function getChildFolders(parent){
-
-  return data.folders.filter(
-    folder =>
-      folder.parent === parent
-  );
-
-}
-
-
-function goHome(){
-
-  currentFolder = "root";
-
-  render();
-
-}
-
-
-function openFolder(id){
-
-  currentFolder = id;
-
-  render();
-
-}
-
-
-/* =========================================================
-   화면 출력
-========================================================= */
-
-function render(){
-
-  const grid =
-    document.getElementById(
-      "grid"
-    );
-
-
-  const path =
-    document.getElementById(
-      "currentPath"
-    );
-
-
-  const folders =
-    getChildFolders(
-      currentFolder
-    );
-
-
-  const items =
-    data.items.filter(
-      item =>
-        item.folder === currentFolder
-    );
-
-
-  const folderPath =
-    getFolderPath();
-
-
-  path.textContent =
-    folderPath
-      .map(folder => folder.name)
-      .join(" / ");
-
-
-  grid.innerHTML = "";
-
-
-  /* 폴더 */
-
-  folders.forEach(folder => {
-
-    const card =
-      document.createElement(
-        "article"
-      );
-
-    card.className = "card";
-
-
-    card.innerHTML = `
+    <div class="image-area">
 
       <div
-        class="thumb"
-        onclick="openFolder('${folder.id}')"
+        class="preview"
+        id="preview"
       >
-
-        <div class="folderThumb">
-          📁
-        </div>
-
+        이미지 없음
       </div>
 
+      <div class="image-info">
 
-      <div class="cardbody">
+        <p>
+          캐릭터의 대표 이미지를 등록할 수 있습니다.<br>
+          선택한 이미지는 이 브라우저에만 저장됩니다.
+        </p>
 
-        <h3>
-          ${escapeHTML(folder.name)}
-        </h3>
-
-
-        ${
-          adminMode
-          ?
-          `
-            <div class="cardactions">
-
-              <button
-                onclick="editFolder('${folder.id}')"
-              >
-                수정
-              </button>
-
-              <button
-                onclick="deleteFolder('${folder.id}')"
-              >
-                삭제
-              </button>
-
-            </div>
-          `
-          :
-          ""
-        }
-
-      </div>
-    `;
-
-
-    grid.appendChild(card);
-
-  });
-
-
-  /* 정보 */
-
-  items.forEach(item => {
-
-    const card =
-      document.createElement(
-        "article"
-      );
-
-    card.className = "card";
-
-
-    const image =
-      item.image
-      ?
-      `
-        <img
-          src="${item.image}"
-          alt=""
+        <label
+          class="upload-btn"
+          for="imageInput"
         >
-      `
-      :
-      `
-        <div
-          style="
-            width:100%;
-            height:100%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:#9aa5b5;
-            font-size:13px;
-          "
+          이미지 선택
+        </label>
+
+        <input
+          id="imageInput"
+          class="file-input"
+          type="file"
+          accept="image/*"
         >
-          이미지 없음
-        </div>
-      `;
-
-
-    card.innerHTML = `
-
-      <div
-        class="thumb"
-        onclick="showDetail('${item.id}')"
-      >
-        ${image}
-      </div>
-
-
-      <div class="cardbody">
-
-        <h3>
-          ${escapeHTML(item.name)}
-        </h3>
-
-
-        ${
-          item.grade
-          ?
-          `
-            <p>
-              ${escapeHTML(item.grade)}
-            </p>
-          `
-          :
-          ""
-        }
-
-
-        ${
-          adminMode
-          ?
-          `
-            <div class="cardactions">
-
-              <button
-                onclick="editItem('${item.id}')"
-              >
-                수정
-              </button>
-
-              <button
-                onclick="deleteItem('${item.id}')"
-              >
-                삭제
-              </button>
-
-            </div>
-          `
-          :
-          ""
-        }
-
-      </div>
-    `;
-
-
-    grid.appendChild(card);
-
-  });
-
-
-  if(
-    folders.length === 0 &&
-    items.length === 0
-  ){
-
-    grid.innerHTML = `
-
-      <div class="emptyState">
-
-        아직 등록된 자료가 없습니다.
 
       </div>
 
-    `;
+    </div>
 
-  }
 
-}
+    <!-- INPUTS -->
 
+    <div class="form-grid">
 
-/* =========================================================
-   폴더 생성 / 수정
-========================================================= */
+      <div class="field">
 
-function openFolderModal(id=null){
-
-  editingId = id;
-
-
-  const folder =
-    id
-    ?
-    data.folders.find(
-      f => f.id === id
-    )
-    :
-    null;
-
-
-  document
-    .getElementById("modalTitle")
-    .textContent =
-    folder
-    ?
-    "폴더 수정"
-    :
-    "폴더 만들기";
-
-
-  document
-    .getElementById("modalContent")
-    .innerHTML = `
-
-      <div class="formGrid">
-
-        <div class="row">
-
-          <label>
-            폴더 이름
-          </label>
-
-          <input
-            id="folderName"
-            value="${
-              folder
-              ?
-              escapeHTML(folder.name)
-              :
-              ""
-            }"
-          >
-
-        </div>
-
-
-        <div class="modalfoot">
-
-          <button
-            class="gradientBtn"
-            onclick="closeModal()"
-          >
-            취소
-          </button>
-
-          <button
-            class="gradientBtn"
-            onclick="saveFolder()"
-          >
-            저장
-          </button>
-
-        </div>
-
-      </div>
-    `;
-
-
-  document
-    .getElementById("modalBg")
-    .classList.add("show");
-
-}
-
-
-function editFolder(id){
-
-  openFolderModal(id);
-
-}
-
-
-async function saveFolder(){
-
-  const name =
-    document
-      .getElementById("folderName")
-      .value
-      .trim();
-
-
-  if(!name){
-
-    alert(
-      "폴더 이름을 입력해주세요."
-    );
-
-    return;
-  }
-
-
-  if(editingId){
-
-    const folder =
-      data.folders.find(
-        f => f.id === editingId
-      );
-
-
-    if(folder){
-
-      folder.name = name;
-
-    }
-
-  }else{
-
-    data.folders.push({
-
-      id:uid(),
-
-      name:name,
-
-      parent:currentFolder
-
-    });
-
-  }
-
-
-  closeModal();
-
-  render();
-
-  await saveData();
-
-}
-
-
-async function deleteFolder(id){
-
-  if(id === "root"){
-
-    alert(
-      "전체 자료 폴더는 삭제할 수 없습니다."
-    );
-
-    return;
-  }
-
-
-  if(
-    !confirm(
-      "이 폴더를 삭제하시겠습니까?\n하위 자료도 함께 삭제됩니다."
-    )
-  ){
-
-    return;
-  }
-
-
-  data.folders =
-    data.folders.filter(
-      folder =>
-        folder.id !== id
-    );
-
-
-  data.items =
-    data.items.filter(
-      item =>
-        item.folder !== id
-    );
-
-
-  render();
-
-  await saveData();
-
-}
-
-
-/* =========================================================
-   정보 폴더 선택
-========================================================= */
-
-function getFolderOptions(){
-
-  return data.folders
-    .map(folder => {
-
-      if(folder.id === "root"){
-        return "";
-      }
-
-
-      return `
-
-        <option
-          value="${folder.id}"
-          ${
-            folder.id === currentFolder
-            ?
-            "selected"
-            :
-            ""
-          }
-        >
-          ${escapeHTML(folder.name)}
-        </option>
-
-      `;
-
-    })
-    .join("");
-
-}
-
-
-/* =========================================================
-   정보 생성 / 수정
-========================================================= */
-
-function openItemModal(id=null){
-
-  editingId = id;
-
-
-  const item =
-    id
-    ?
-    data.items.find(
-      i => i.id === id
-    )
-    :
-    null;
-
-
-  document
-    .getElementById("modalTitle")
-    .textContent =
-    item
-    ?
-    "정보 수정"
-    :
-    "정보 만들기";
-
-
-  document
-    .getElementById("modalContent")
-    .innerHTML =
-    itemFormHTML(item);
-
-
-  document
-    .getElementById("modalBg")
-    .classList.add("show");
-
-}
-
-
-function editItem(id){
-
-  openItemModal(id);
-
-}
-
-
-function itemFormHTML(item){
-
-  item =
-    item || {};
-
-
-  return `
-
-    <div class="formGrid">
-
-
-      <div class="row">
-
-        <label>
+        <label for="name">
           이름
         </label>
 
         <input
-          id="itemName"
-          value="${escapeHTML(item.name || "")}"
+          id="name"
+          type="text"
+          placeholder="캐릭터 이름"
         >
 
       </div>
 
 
-      <div class="row">
+      <div class="field">
 
-        <label>
+        <label for="grade">
           학년
         </label>
 
         <input
-          id="itemGrade"
-          value="${escapeHTML(item.grade || "")}"
+          id="grade"
+          type="text"
+          placeholder="예: 2학년"
         >
 
       </div>
 
 
-      <div class="row">
+      <div class="field">
 
-        <label>
-          간단 정보
-        </label>
-
-        <textarea
-          id="itemSimple"
-        >${escapeHTML(item.simple || "")}</textarea>
-
-      </div>
-
-
-      <div class="row">
-
-        <label>
-          분야
+        <label for="field">
+          Field
         </label>
 
         <input
-          id="itemField"
-          value="${escapeHTML(item.field || "")}"
+          id="field"
+          type="text"
+          placeholder="능력 분야"
         >
 
       </div>
 
 
-      <div class="row">
+      <div class="field">
 
-        <label>
-          초능력
-        </label>
-
-        <textarea
-          id="itemAbility"
-        >${escapeHTML(item.ability || "")}</textarea>
-
-      </div>
-
-
-      <div class="row">
-
-        <label>
-          좋아하는 것
-        </label>
-
-        <textarea
-          id="itemLikes"
-        >${escapeHTML(item.likes || "")}</textarea>
-
-      </div>
-
-
-      <div class="row">
-
-        <label>
-          싫어하는 것
-        </label>
-
-        <textarea
-          id="itemDislikes"
-        >${escapeHTML(item.dislikes || "")}</textarea>
-
-      </div>
-
-
-      <div class="row">
-
-        <label>
-          가족관계
-        </label>
-
-        <textarea
-          id="itemFamily"
-        >${escapeHTML(item.family || "")}</textarea>
-
-      </div>
-
-
-      <div class="row">
-
-        <label>
-          이외의 관계
-        </label>
-
-        <textarea
-          id="itemRelations"
-        >${escapeHTML(item.relations || "")}</textarea>
-
-      </div>
-
-
-      <div class="row">
-
-        <label>
-          추가 설명
-        </label>
-
-        <textarea
-          id="itemExtra"
-        >${escapeHTML(item.extra || "")}</textarea>
-
-      </div>
-
-
-      <div class="row">
-
-        <label>
-          대표 이미지
+        <label for="ability">
+          Ability
         </label>
 
         <input
-          id="itemImage"
-          type="file"
-          accept="image/*"
-          onchange="previewUpload(event)"
+          id="ability"
+          type="text"
+          placeholder="능력 이름"
         >
-
-
-        <div id="imagePreview">
-
-          ${
-            item.image
-            ?
-            `
-              <img
-                class="preview"
-                src="${item.image}"
-              >
-            `
-            :
-            ""
-          }
-
-        </div>
 
       </div>
 
 
-      <div class="modalfoot">
+      <div class="field">
 
-        <button
-          class="gradientBtn"
-          onclick="closeModal()"
-        >
-          취소
-        </button>
+        <label for="likes">
+          Likes
+        </label>
 
-        <button
-          class="gradientBtn"
-          onclick="saveItem()"
-        >
-          저장
-        </button>
+        <textarea
+          id="likes"
+          placeholder="좋아하는 것"
+        ></textarea>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="dislikes">
+          Dislikes
+        </label>
+
+        <textarea
+          id="dislikes"
+          placeholder="싫어하는 것"
+        ></textarea>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="family">
+          Family
+        </label>
+
+        <textarea
+          id="family"
+          placeholder="가족 관계"
+        ></textarea>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="relationships">
+          Relationships
+        </label>
+
+        <textarea
+          id="relationships"
+          placeholder="인물 관계"
+        ></textarea>
 
       </div>
 
     </div>
 
-  `;
 
-}
+    <!-- ACTIONS -->
+
+    <div class="actions">
+
+      <button
+        id="saveBtn"
+        class="btn btn-primary"
+        type="button"
+      >
+        저장하기
+      </button>
+
+      <button
+        id="newBtn"
+        class="btn btn-secondary"
+        type="button"
+      >
+        새로 작성
+      </button>
+
+    </div>
+
+  </section>
 
 
-/* =========================================================
-   이미지 미리보기
-========================================================= */
+  <!-- SAVED CHARACTERS -->
 
-function previewUpload(event){
+  <section class="panel saved-section">
 
-  const file =
-    event.target.files[0];
+    <div class="saved-header">
+
+      <h2>
+        Saved Characters
+      </h2>
+
+      <button
+        id="refreshBtn"
+        class="refresh-btn"
+        type="button"
+      >
+        새로고침
+      </button>
+
+    </div>
 
 
-  if(!file){
-    return;
+    <div
+      id="savedList"
+      class="saved-list"
+    ></div>
+
+  </section>
+
+</div>
+
+
+<!-- STATUS -->
+
+<div
+  id="status"
+  class="status"
+></div>
+
+
+<script>
+
+  /* =====================================================
+     LOCAL STORAGE
+     ===================================================== */
+
+  const STORAGE_KEY =
+    "effect-field-academy-characters";
+
+
+  let characters =
+    JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "[]"
+    );
+
+
+  let editingId = null;
+
+  let selectedImage = "";
+
+
+  /* =====================================================
+     DOM
+     ===================================================== */
+
+  const imageInput =
+    document.getElementById("imageInput");
+
+  const preview =
+    document.getElementById("preview");
+
+  const saveBtn =
+    document.getElementById("saveBtn");
+
+  const newBtn =
+    document.getElementById("newBtn");
+
+  const refreshBtn =
+    document.getElementById("refreshBtn");
+
+  const savedList =
+    document.getElementById("savedList");
+
+  const status =
+    document.getElementById("status");
+
+
+  /* =====================================================
+     STATUS MESSAGE
+     ===================================================== */
+
+  function showStatus(message) {
+
+    status.textContent = message;
+
+    status.classList.add("show");
+
+    setTimeout(() => {
+
+      status.classList.remove("show");
+
+    }, 2500);
+
   }
 
 
-  const reader =
-    new FileReader();
+  /* =====================================================
+     SAVE LOCAL STORAGE
+     ===================================================== */
+
+  function saveCharacters() {
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(characters)
+    );
+
+  }
 
 
-  reader.onload =
-    function(e){
+  /* =====================================================
+     GET FORM DATA
+     ===================================================== */
 
-      document
-        .getElementById("imagePreview")
-        .innerHTML = `
+  function getFormData() {
 
-          <img
-            class="preview"
-            src="${e.target.result}"
-          >
+    return {
 
-        `;
+      name:
+        document.getElementById("name").value.trim(),
+
+      grade:
+        document.getElementById("grade").value.trim(),
+
+      field:
+        document.getElementById("field").value.trim(),
+
+      ability:
+        document.getElementById("ability").value.trim(),
+
+      likes:
+        document.getElementById("likes").value.trim(),
+
+      dislikes:
+        document.getElementById("dislikes").value.trim(),
+
+      family:
+        document.getElementById("family").value.trim(),
+
+      relationships:
+        document
+          .getElementById("relationships")
+          .value
+          .trim(),
+
+      image:
+        selectedImage
 
     };
 
-
-  reader.readAsDataURL(file);
-
-}
+  }
 
 
-/* =========================================================
-   이미지 업로드
-========================================================= */
+  /* =====================================================
+     SET FORM DATA
+     ===================================================== */
 
-async function uploadImage(file){
+  function setFormData(data) {
 
-  if(!supabaseClient){
+    document.getElementById("name").value =
+      data.name || "";
 
-    throw new Error(
-      "Supabase가 연결되지 않았습니다."
-    );
+    document.getElementById("grade").value =
+      data.grade || "";
+
+    document.getElementById("field").value =
+      data.field || "";
+
+    document.getElementById("ability").value =
+      data.ability || "";
+
+    document.getElementById("likes").value =
+      data.likes || "";
+
+    document.getElementById("dislikes").value =
+      data.dislikes || "";
+
+    document.getElementById("family").value =
+      data.family || "";
+
+    document.getElementById("relationships").value =
+      data.relationships || "";
+
+    selectedImage =
+      data.image || "";
+
+    updatePreview();
 
   }
 
 
-  const extension =
-    file.name
-      .split(".")
-      .pop();
+  /* =====================================================
+     IMAGE
+  ===================================================== */
+
+  imageInput.addEventListener(
+    "change",
+    function(event) {
+
+      const file =
+        event.target.files[0];
+
+      if (!file) {
+        return;
+      }
 
 
-  const path =
-    `${uid()}.${extension}`;
+      const reader =
+        new FileReader();
 
 
-  const result =
-    await supabaseClient
-      .storage
-      .from("academy-images")
-      .upload(
-        path,
-        file
-      );
+      reader.onload =
+        function(e) {
+
+          selectedImage =
+            e.target.result;
+
+          updatePreview();
+
+        };
 
 
-  if(result.error){
+      reader.readAsDataURL(file);
 
-    throw result.error;
-
-  }
-
-
-  return supabaseClient
-    .storage
-    .from("academy-images")
-    .getPublicUrl(path)
-    .data
-    .publicUrl;
-
-}
+    }
+  );
 
 
-/* =========================================================
-   정보 저장
-========================================================= */
+  function updatePreview() {
 
-async function saveItem(){
+    if (!selectedImage) {
 
-  const name =
-    document
-      .getElementById("itemName")
-      .value
-      .trim();
-
-
-  if(!name){
-
-    alert(
-      "이름을 입력해주세요."
-    );
-
-    return;
-  }
-
-
-  let image = "";
-
-
-  if(editingId){
-
-    const oldItem =
-      data.items.find(
-        i => i.id === editingId
-      );
-
-    image =
-      oldItem?.image || "";
-
-  }
-
-
-  const file =
-    document
-      .getElementById("itemImage")
-      .files[0];
-
-
-  if(file){
-
-    try{
-
-      image =
-        await uploadImage(file);
-
-    }catch(error){
-
-      console.error(error);
-
-      alert(
-        "이미지 업로드에 실패했습니다.\nSupabase 설정을 확인해주세요."
-      );
+      preview.innerHTML =
+        "이미지 없음";
 
       return;
     }
 
+
+    preview.innerHTML = `
+      <img
+        src="${selectedImage}"
+        alt="캐릭터 이미지"
+      >
+    `;
+
   }
 
 
-  const itemData = {
+  /* =====================================================
+     CLEAR FORM
+  ===================================================== */
 
-    name:name,
+  function clearForm() {
 
-    grade:
-      document
-        .getElementById("itemGrade")
-        .value,
+    editingId = null;
 
-    simple:
-      document
-        .getElementById("itemSimple")
-        .value,
+    selectedImage = "";
 
-    field:
-      document
-        .getElementById("itemField")
-        .value,
+    document.getElementById("name").value = "";
+    document.getElementById("grade").value = "";
+    document.getElementById("field").value = "";
+    document.getElementById("ability").value = "";
+    document.getElementById("likes").value = "";
+    document.getElementById("dislikes").value = "";
+    document.getElementById("family").value = "";
+    document.getElementById("relationships").value = "";
 
-    ability:
-      document
-        .getElementById("itemAbility")
-        .value,
+    imageInput.value = "";
 
-    likes:
-      document
-        .getElementById("itemLikes")
-        .value,
+    updatePreview();
 
-    dislikes:
-      document
-        .getElementById("itemDislikes")
-        .value,
+    saveBtn.textContent =
+      "저장하기";
 
-    family:
-      document
-        .getElementById("itemFamily")
-        .value,
-
-    relations:
-      document
-        .getElementById("itemRelations")
-        .value,
-
-    extra:
-      document
-        .getElementById("itemExtra")
-        .value,
-
-    image:image,
-
-    folder:
-      editingId
-      ?
-      (
-        data.items.find(
-          i => i.id === editingId
-        )?.folder
-        ||
-        currentFolder
-      )
-      :
-      currentFolder
-
-  };
+  }
 
 
-  if(editingId){
+  /* =====================================================
+     SAVE
+  ===================================================== */
 
-    const index =
-      data.items.findIndex(
-        i => i.id === editingId
+  saveBtn.addEventListener(
+    "click",
+    function() {
+
+      const data =
+        getFormData();
+
+
+      if (!data.name) {
+
+        showStatus(
+          "이름을 입력해주세요."
+        );
+
+        document
+          .getElementById("name")
+          .focus();
+
+        return;
+      }
+
+
+      /* 수정 */
+
+      if (editingId !== null) {
+
+        const index =
+          characters.findIndex(
+            character =>
+              character.id === editingId
+          );
+
+
+        if (index !== -1) {
+
+          characters[index] = {
+
+            ...characters[index],
+
+            ...data
+
+          };
+
+        }
+
+
+        showStatus(
+          "캐릭터가 수정되었습니다."
+        );
+
+      }
+
+
+      /* 새 캐릭터 */
+
+      else {
+
+        characters.unshift({
+
+          id:
+            Date.now(),
+
+          ...data,
+
+          createdAt:
+            new Date().toISOString()
+
+        });
+
+
+        showStatus(
+          "캐릭터가 저장되었습니다."
+        );
+
+      }
+
+
+      saveCharacters();
+
+      renderCharacters();
+
+      clearForm();
+
+    }
+  );
+
+
+  /* =====================================================
+     NEW
+  ===================================================== */
+
+  newBtn.addEventListener(
+    "click",
+    function() {
+
+      clearForm();
+
+      showStatus(
+        "새 캐릭터를 작성할 수 있습니다."
+      );
+
+    }
+  );
+
+
+  /* =====================================================
+     REFRESH
+  ===================================================== */
+
+  refreshBtn.addEventListener(
+    "click",
+    function() {
+
+      characters =
+        JSON.parse(
+          localStorage.getItem(
+            STORAGE_KEY
+          ) || "[]"
+        );
+
+      renderCharacters();
+
+      showStatus(
+        "목록을 새로고침했습니다."
+      );
+
+    }
+  );
+
+
+  /* =====================================================
+     EDIT
+  ===================================================== */
+
+  function editCharacter(id) {
+
+    const character =
+      characters.find(
+        item => item.id === id
       );
 
 
-    if(index !== -1){
-
-      data.items[index] = {
-
-        ...data.items[index],
-
-        ...itemData
-
-      };
-
+    if (!character) {
+      return;
     }
 
-  }else{
 
-    data.items.push({
+    editingId = id;
 
-      id:uid(),
+    setFormData(character);
 
-      ...itemData
+    saveBtn.textContent =
+      "수정 저장";
+
+
+    window.scrollTo({
+
+      top: 0,
+
+      behavior: "smooth"
 
     });
 
   }
 
 
-  closeModal();
+  /* =====================================================
+     DELETE
+  ===================================================== */
 
-  render();
+  function deleteCharacter(id) {
 
-  await saveData();
-
-}
-
-
-/* =========================================================
-   정보 삭제
-========================================================= */
-
-async function deleteItem(id){
-
-  if(
-    !confirm(
-      "이 정보를 삭제하시겠습니까?"
-    )
-  ){
-
-    return;
-  }
+    const character =
+      characters.find(
+        item => item.id === id
+      );
 
 
-  data.items =
-    data.items.filter(
-      item =>
-        item.id !== id
-    );
-
-
-  render();
-
-  await saveData();
-
-}
-
-
-/* =========================================================
-   모달 닫기
-========================================================= */
-
-function closeModal(){
-
-  document
-    .getElementById("modalBg")
-    .classList.remove("show");
-
-
-  editingId = null;
-
-}
-
-
-/* =========================================================
-   상세 페이지
-========================================================= */
-
-function showDetail(id){
-
-  const item =
-    data.items.find(
-      i => i.id === id
-    );
-
-
-  if(!item){
-    return;
-  }
-
-
-  const detail =
-    document.getElementById(
-      "detailPage"
-    );
-
-
-  detail.innerHTML = `
-
-    <div class="detailHeader">
-
-      <h2>
-        ${escapeHTML(item.name)}
-      </h2>
-
-      ${
-        item.grade
-        ?
-        `
-          <p>
-            ${escapeHTML(item.grade)}
-          </p>
-        `
-        :
-        ""
-      }
-
-    </div>
-
-
-    ${
-      item.image
-      ?
-      `
-        <div class="detailImageWrap">
-
-          <img
-            class="detailImage"
-            src="${item.image}"
-            alt=""
-          >
-
-        </div>
-      `
-      :
-      ""
+    if (!character) {
+      return;
     }
 
 
-    <div class="detailContent">
+    const confirmed =
+      confirm(
+        `"${character.name || "이 캐릭터"}"를 삭제할까요?`
+      );
 
 
-      <table class="infoTable">
+    if (!confirmed) {
+      return;
+    }
 
 
-        ${
-          item.simple
-          ?
-          `
-            <tr>
-
-              <th>
-                간단 정보
-              </th>
-
-              <td>
-                ${escapeHTML(item.simple)}
-              </td>
-
-            </tr>
-          `
-          :
-          ""
-        }
+    characters =
+      characters.filter(
+        item => item.id !== id
+      );
 
 
-        ${
-          item.field
-          ?
-          `
-            <tr>
+    saveCharacters();
 
-              <th>
-                분야
-              </th>
-
-              <td>
-                ${escapeHTML(item.field)}
-              </td>
-
-            </tr>
-          `
-          :
-          ""
-        }
+    renderCharacters();
 
 
-        ${
-          item.ability
-          ?
-          `
-            <tr>
+    if (editingId === id) {
 
-              <th>
-                초능력
-              </th>
+      clearForm();
 
-              <td>
-                ${escapeHTML(item.ability)}
-              </td>
-
-            </tr>
-          `
-          :
-          ""
-        }
+    }
 
 
-        ${
-          item.likes
-          ?
-          `
-            <tr>
+    showStatus(
+      "캐릭터가 삭제되었습니다."
+    );
 
-              <th>
-                좋아하는 것
-              </th>
-
-              <td>
-                ${escapeHTML(item.likes)}
-              </td>
-
-            </tr>
-          `
-          :
-          ""
-        }
+  }
 
 
-        ${
-          item.dislikes
-          ?
-          `
-            <tr>
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
-              <th>
-                싫어하는 것
-              </th>
+  function renderCharacters() {
 
-              <td>
-                ${escapeHTML(item.dislikes)}
-              </td>
+    if (
+      !characters ||
+      characters.length === 0
+    ) {
 
-            </tr>
-          `
-          :
-          ""
-        }
+      savedList.innerHTML = `
+        <div class="empty">
+          저장된 캐릭터가 없습니다.
+        </div>
+      `;
 
-
-        ${
-          item.family
-          ?
-          `
-            <tr>
-
-              <th>
-                가족관계
-              </th>
-
-              <td>
-                ${escapeHTML(item.family)}
-              </td>
-
-            </tr>
-          `
-          :
-          ""
-        }
+      return;
+    }
 
 
-        ${
-          item.relations
-          ?
-          `
-            <tr>
+    savedList.innerHTML =
+      characters
+        .map(character => {
 
-              <th>
-                이외의 관계
-              </th>
-
-              <td>
-                ${escapeHTML(item.relations)}
-              </td>
-
-            </tr>
-          `
-          :
-          ""
-        }
+          const image =
+            character.image
+              ? `
+                <img
+                  src="${character.image}"
+                  alt="${escapeHtml(character.name)}"
+                >
+              `
+              : "";
 
 
-      </table>
+          return `
+
+            <div class="saved-card">
+
+              <div class="saved-thumb">
+                ${image}
+              </div>
 
 
-      ${
-        item.extra
-        ?
-        `
-          <section class="wikiSection">
+              <div class="saved-info">
 
-            <h3>
-              추가 설명
-            </h3>
+                <h3>
+                  ${escapeHtml(
+                    character.name ||
+                    "이름 없음"
+                  )}
+                </h3>
 
-            <div class="wikiBody">
-              ${escapeHTML(item.extra)}
+                <p>
+                  ${escapeHtml(
+                    character.field ||
+                    "Field 미입력"
+                  )}
+                  ·
+                  ${escapeHtml(
+                    character.ability ||
+                    "Ability 미입력"
+                  )}
+                </p>
+
+
+                <div class="saved-buttons">
+
+                  <button
+                    class="small-btn"
+                    onclick="editCharacter(${character.id})"
+                  >
+                    수정
+                  </button>
+
+                  <button
+                    class="small-btn delete"
+                    onclick="deleteCharacter(${character.id})"
+                  >
+                    삭제
+                  </button>
+
+                </div>
+
+              </div>
+
             </div>
 
-          </section>
-        `
-        :
-        ""
-      }
+          `;
 
-
-      ${
-        adminMode
-        ?
-        `
-          <div class="detailActions">
-
-            <button
-              onclick="
-                editItem('${item.id}');
-                closeDetail();
-              "
-            >
-              수정
-            </button>
-
-            <button
-              onclick="
-                deleteItem('${item.id}');
-                closeDetail();
-              "
-            >
-              삭제
-            </button>
-
-          </div>
-        `
-        :
-        ""
-      }
-
-
-    </div>
-
-  `;
-
-
-  document
-    .getElementById("detailOverlay")
-    .classList.add("show");
-
-
-  document.body.classList.add(
-    "detailOpen"
-  );
-
-}
-
-
-/* =========================================================
-   상세 닫기
-========================================================= */
-
-function closeDetail(){
-
-  document
-    .getElementById("detailOverlay")
-    .classList.remove("show");
-
-
-  document.body.classList.remove(
-    "detailOpen"
-  );
-
-}
-
-
-/* =========================================================
-   ESC
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  function(event){
-
-    if(event.key === "Escape"){
-
-      closeModal();
-
-      closeDetail();
-
-    }
+        })
+        .join("");
 
   }
-);
+
+
+  /* =====================================================
+     HTML ESCAPE
+  ===================================================== */
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+
+  /* =====================================================
+     START
+  ===================================================== */
+
+  renderCharacters();
 
 </script>
 
